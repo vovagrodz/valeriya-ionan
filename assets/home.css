@@ -18,7 +18,7 @@
     --ease:cubic-bezier(.22,1,.36,1);
     --ease-menu:cubic-bezier(.76,0,.24,1);   /* in-out expo — menu reveal */
   }
-  *{box-sizing:border-box;margin:0;padding:0}
+  *{box-sizing:border-box;margin:0;padding:0}a{text-decoration:none}
   html{scroll-behavior:smooth}
   section[id],footer[id]{scroll-margin-top:88px}   /* clear sticky nav on anchor jumps */
   body{
