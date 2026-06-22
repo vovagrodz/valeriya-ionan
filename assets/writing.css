@@ -216,7 +216,7 @@
   .pl{position:fixed;inset:0;z-index:300;background:#070909;color:#fff;
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;will-change:transform}
   .pl.done{transform:translateY(-100%);transition:transform .95s var(--ease-menu)}
-  .pl-mark{overflow:hidden;padding-bottom:.06em}
+  .pl-mark{overflow:hidden;padding:0 .16em .06em}
   .pl-mark span{display:block;font-weight:500;font-size:clamp(30px,5.2vw,58px);letter-spacing:-.03em;
     transform:translateY(112%);transition:transform .9s var(--ease-menu) .12s}
   .pl.in .pl-mark span{transform:translateY(0)}
