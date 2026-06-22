@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Valeriya Ionan — Government &amp; business innovator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;1,500&display=swap" rel="stylesheet" />
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<style>
+  /* ============ DESIGN TOKENS (Figma «Valeria-Landing») ============ */
+  :root{
+    --ink:#101319;          /* primary text                    */
+    --bar:#000000;          /* black bars / buttons            */
+    --chip:#1c1c1c;         /* nav pill                        */
+    --paper:#f9f9f9;        /* page background                 */
+    --soft:#f3f3f3;         /* soft pill surface               */
+    --muted:#454545;        /* secondary body text             */
+    --muted-2:#9a9a9f;      /* tertiary / index numbers        */
+    --line:#e3e2df;         /* hairlines                       */
+    --on-dark:#ffffff;
+    --on-dark-mut:rgba(255,255,255,.62);
+    --on-dark-line:rgba(255,255,255,.12);
+    --accent:#f45000;       /* Substack orange accent          */
+    --burg-1:#5c0b12;--burg-2:#3f0609;--burg-3:#220100; /* hero gradient */
+    --r-lg:20px;--r-md:14px;--r-sm:8px;
+    --maxw:1440px;--pad:20px;
+    --ease:cubic-bezier(.22,1,.36,1);
+    --ease-menu:cubic-bezier(.76,0,.24,1);   /* in-out expo — menu reveal */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  section[id],footer[id]{scroll-margin-top:88px}   /* clear sticky nav on anchor jumps */
+  body{
+    font-family:"Inter Tight",system-ui,sans-serif;
+    background:var(--paper);color:var(--ink);
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    letter-spacing:-.011em;overflow-x:hidden;
+  }
+  img{display:block;max-width:100%}
+  a{color:inherit}
+  .wrap{width:100%;max-width:none;margin:0;padding:0 20px}                     /* full-width, 20px gutters on every screen — no max-width */
+  .g8{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:20px}      /* 8-col / 20px gutter grid */
+  .sec-title{font-weight:500;font-size:clamp(34px,3.6vw,50px);line-height:1;letter-spacing:-.02em;color:var(--ink)}
+
+  /* ============ NAVBAR ============ */
+  nav.bar{position:sticky;top:0;z-index:60;padding-top:20px;background:linear-gradient(var(--paper) 60%,transparent)}
+  nav.bar .inner{display:flex;align-items:center;gap:16px;background:var(--bar);border-radius:var(--r-sm);height:54px;padding:0 5px 0 20px;color:#fff}
+  nav .logo{font-weight:500;font-size:24px;letter-spacing:-.48px}
+  nav .links{display:flex;gap:8px;margin:0 auto;position:relative}
+  nav .links a{position:relative;z-index:2;color:#fff;text-decoration:none;font-weight:500;font-size:16px;background:var(--chip);padding:10px 15px;border-radius:6px;letter-spacing:-.02em;transition:color .3s var(--ease)}
+  nav .links a:hover{color:#fff}
+  nav .nav-hl{position:absolute;left:0;top:0;border-radius:6px;background:rgba(255,255,255,.15);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);transition:transform .42s var(--ease),width .42s var(--ease),height .42s var(--ease),opacity .3s var(--ease);pointer-events:none;z-index:3;opacity:0}
+  nav .mail{color:#fff;font-size:16px;font-weight:500;text-decoration:none;transition:color .3s var(--ease)}
+  nav .mail:hover{color:#fff}
+  nav .menu{display:flex;align-items:center;gap:10px;background:#fff;color:#000;font-weight:500;font-size:16px;padding:10px 15px;border-radius:5px;cursor:pointer;transition:background .3s var(--ease),color .3s var(--ease)}
+  nav .menu svg{stroke:currentColor}
+  nav .menu:hover{background:#2c2c2c;color:#fff}
+  @media(max-width:900px){nav .links,nav .mail{display:none}}
+
+  /* ============ HERO ============ */
+  .hero{padding-top:54px}
+  .hero-top{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:start;margin-bottom:46px}
+  .hero-top h1{font-weight:500;font-size:clamp(44px,4.9vw,70px);line-height:1;letter-spacing:-.02em;max-width:660px;color:#000}
+  .hero-lead{font-weight:600;font-size:24px;line-height:1.15;letter-spacing:-.02em;color:#000;max-width:520px}
+  .hero-desc{font-weight:500;font-size:16px;line-height:1.2;letter-spacing:-.022em;color:var(--muted);margin-top:18px;max-width:520px}
+  @media(max-width:860px){.hero-top{grid-template-columns:1fr;gap:24px}}
+
+  .hero-card{
+    position:relative;overflow:hidden;border-radius:var(--r-lg);
+    background:radial-gradient(110% 115% at 42% 78%,var(--burg-1) 0%,var(--burg-2) 50%,var(--burg-3) 100%);
+    display:flex;align-items:center;min-height:900px;
+  }
+  .hero-portrait{position:absolute;left:0;top:0;bottom:0;width:62%;overflow:hidden}
+  .hero-portrait img{width:100%;height:100%;object-fit:cover;object-position:82% 12%}
+  .hero-content{position:relative;z-index:2;margin-left:calc(50% + 25px);width:calc(50% - 25px);display:flex;flex-direction:column;justify-content:center;padding:0 40px 0 0}
+  .hero-quote{position:relative;max-width:560px;margin-bottom:64px}
+  .hero-quote .qmarks{display:flex;gap:18px;margin-bottom:6px}.hero-quote .qmarks svg{display:block}
+  .hero-quote h2{font-weight:600;font-size:clamp(26px,2.7vw,38px);line-height:1.1;letter-spacing:-.02em;color:#fff;margin:14px 0 26px}
+  .hero-quote p{font-weight:600;font-size:18px;line-height:1.3;letter-spacing:-.02em;color:#fff;max-width:496px}
+  .tiles{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:604px}
+  .ctile{position:relative;overflow:hidden;border-radius:var(--r-lg);padding:20px 30px 40px 20px;min-height:300px;display:flex;flex-direction:column;justify-content:space-between;color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.14);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:background-color .35s var(--ease),border-color .35s var(--ease)}
+  .ctile:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.24)}
+  .ctile>*{position:relative;z-index:1}
+  .ctile .ic{margin-bottom:30px;line-height:0}
+  .ctile .ic svg{display:block}
+  .ctile h3{font-weight:600;font-size:18px;line-height:1.15;letter-spacing:-.02em;margin-bottom:10px;color:#fff}
+  .ctile p{font-weight:500;font-size:16px;line-height:1.3;letter-spacing:-.02em;color:rgba(255,255,255,.86)}
+  .ctile .cta{margin-top:24px;font-weight:700;font-size:18px;letter-spacing:-.02em;text-decoration:none;color:#fff}
+  @media(max-width:1100px){.hero-card{flex-direction:column;align-items:stretch;min-height:0}
+    .hero-portrait{position:relative;width:100%;height:440px}
+    .hero-portrait img{object-position:58% 30%;-webkit-mask:none;mask:none}
+    .hero-content{margin-left:0;width:100%;padding:36px 26px}.hero-quote{margin-top:0}}
+  @media(max-width:560px){.tiles{grid-template-columns:1fr}}
+
+  /* ============ MEET THE ARCHITECT ============ */
+  .meet{padding:120px 0 0}
+  .meet-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:stretch}
+  .meet-left{display:flex;flex-direction:column;align-items:flex-start}
+  .meet-left .quote-pill{margin:auto 0}
+  .quote-pill{display:inline-flex;align-items:center;gap:14px;background:var(--soft);border-radius:10px;padding:0 22px 0 18px;height:80px;width:500px;max-width:100%}
+  .quote-pill .qic{width:40px;height:40px;flex:none}
+  .quote-pill span{font-weight:600;font-size:24px;letter-spacing:-.02em;white-space:nowrap}
+  .btn-dark{display:inline-flex;align-items:center;gap:10px;background:var(--bar);color:#fff;border-radius:6px;padding:15px;font-weight:500;font-size:16px;letter-spacing:-.02em;text-decoration:none;transition:background .35s var(--ease),color .35s var(--ease)}
+  .btn-dark:hover{background:#1c1c1c}
+  .btn-dark .ic{width:24px;height:24px}.btn-dark .ic svg{width:100%;height:100%;display:block;stroke:currentColor}
+  .meet-cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+  .btn-line{display:inline-flex;align-items:center;gap:10px;background:transparent;color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:14px;font-weight:500;font-size:16px;letter-spacing:-.02em;text-decoration:none;cursor:pointer;font-family:inherit;transition:background .35s var(--ease),color .35s var(--ease),border-color .35s var(--ease)}
+  .btn-line:hover{background:var(--bar);color:#fff;border-color:var(--bar)}
+  .btn-line .ic{width:24px;height:24px}.btn-line .ic svg{width:100%;height:100%;display:block;stroke:currentColor}
+  .bio-lead{font-weight:600;font-size:24px;line-height:1.3;letter-spacing:-.02em;color:var(--ink);max-width:700px}
+  .bio-sub{font-weight:500;font-size:16px;line-height:1.3;letter-spacing:-.02em;color:var(--muted);margin-top:24px;max-width:700px}
+  @media(max-width:980px){.meet-grid{grid-template-columns:1fr;gap:30px}.quote-pill span{white-space:normal}}
+
+  /* ============ RECOGNIZED BY (marquee band) ============ */
+  .recog{margin-top:90px;border-top:1px solid var(--line)}
+  .recog .row{position:relative;height:110px;display:flex;align-items:center;border-bottom:1px solid var(--line);overflow:hidden}
+  .recog .label{position:relative;z-index:3;flex:none;display:flex;align-items:center;height:100%;background:var(--paper);font-weight:500;font-size:32px;line-height:1;letter-spacing:-.02em;padding-right:30px;white-space:nowrap}
+  .recog .row.r2 .label{order:2;padding-right:0;padding-left:30px;border-left:1px solid var(--line)}
+  .recog .label.l1{border-right:1px solid var(--line)}
+  .recog .track-wrap{position:relative;flex:1;overflow:hidden;height:100%;display:flex;align-items:center}
+  .recog .row.r2 .track-wrap{order:1}
+  .recog .track{display:flex;align-items:center;gap:22px;white-space:nowrap;will-change:transform;animation:marq 38s linear infinite}
+  .recog .row.r2 .track{animation-duration:46s;animation-direction:reverse}
+  .recog .track:hover{animation-play-state:paused}
+  .recog .chip{font-weight:600;font-size:24px;line-height:1.3;letter-spacing:-.02em;color:var(--ink)}
+  .recog .dot{width:10px;height:10px;border-radius:50%;background:var(--ink);flex:none}
+  /* edge fades */
+  .recog .track-wrap::before,.recog .track-wrap::after{content:"";position:absolute;top:50%;transform:translateY(-50%);height:80px;width:200px;z-index:2;pointer-events:none}
+  .recog .track-wrap::before{left:0;background:linear-gradient(90deg,var(--paper),transparent)}
+  .recog .track-wrap::after{right:0;background:linear-gradient(270deg,var(--paper),transparent)}
+  @keyframes marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  @media(prefers-reduced-motion:reduce){.recog .track{animation:none}}
+
+  /* ============ WHO I WORK WITH (pinned scroll-sequence, superpower.com style) ============ */
+  .who{position:relative}
+  .who-track{height:320vh;position:relative}
+  .who-pin{position:sticky;top:0;height:100vh}
+  .who-pin>.wrap{position:relative;height:100%;display:flex;flex-direction:column;justify-content:flex-start;padding-top:94px;padding-bottom:30px}
+  .who-head{position:relative;z-index:4;display:flex;justify-content:space-between;align-items:baseline;margin-bottom:24px;flex:none}
+  .who-head .t{font-weight:500;font-size:50px;letter-spacing:-.02em;color:var(--ink)}
+  .who-head .c{font-weight:500;font-size:14px;color:var(--muted-2);letter-spacing:.02em}
+  .who-stage{position:relative;width:100%;flex:1;min-height:0;max-height:1000px;border-radius:var(--r-lg);overflow:hidden;background:#0c0c0c}
+  .who-bg{position:absolute;inset:0}
+  .who-bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.06);transition:opacity 1s var(--ease),transform 1.4s var(--ease)}
+  .who-bg img.on{opacity:1;transform:scale(1)}
+  .who-shade{position:absolute;inset:0;background:linear-gradient(125.7deg,rgba(0,0,0,.9) 17.3%,rgba(0,0,0,0) 62%)}
+  .who-pad{position:absolute;inset:0;padding:clamp(28px,4vw,64px);display:flex;flex-direction:column;justify-content:space-between;z-index:2}
+  .who-copy{position:relative;max-width:560px;min-height:360px}
+  .who-block{position:absolute;inset:0;opacity:0;transform:translateY(16px);transition:opacity .65s var(--ease),transform .65s var(--ease);pointer-events:none;color:#fff}
+  .who-block.on{opacity:1;transform:none;pointer-events:auto}
+  .who-block h3{font-weight:600;font-size:32px;line-height:1.3;letter-spacing:-.02em;margin-bottom:30px}
+  .who-block p{font-weight:500;font-size:16px;line-height:1.3;letter-spacing:-.02em;color:#fff;margin-bottom:15px;max-width:532px}
+  .who-block p .lead{color:#fff;font-weight:600}
+  .who-mail{position:relative;display:inline-flex;align-items:center;gap:10px;margin-top:8px;padding:10px 15px;border-radius:8px;color:#fff;font-weight:500;font-size:16px;letter-spacing:-.02em;text-decoration:none;
+    background:rgba(10,10,12,.32);border:1px solid rgba(255,255,255,.14);
+    -webkit-backdrop-filter:blur(22px) saturate(1.6);backdrop-filter:blur(22px) saturate(1.6);
+    box-shadow:inset 0 1px 0.5px rgba(255,255,255,.4),0 14px 32px -14px rgba(0,0,0,.6);
+    transition:background .3s var(--ease)}
+  .who-mail:hover{background:rgba(22,22,26,.45)}
+  .who-mail svg{width:24px;height:24px;flex:none}
+  .who-index{display:flex;flex-direction:column;gap:0;align-self:flex-start}
+  .who-index button{appearance:none;background:none;border:0;cursor:pointer;text-align:left;display:flex;align-items:center;gap:12px;color:rgba(255,255,255,.3);font-family:inherit;font-weight:500;font-size:16px;letter-spacing:-.02em;padding:7px 0;transition:color .4s var(--ease)}
+  .who-index button .bar{width:0;height:1.5px;background:#fff;transition:width .45s var(--ease);opacity:.0}
+  .who-index button.on{color:#fff}
+  .who-index button.on .bar{width:26px;opacity:1}
+  @media(max-width:860px){.who-track{height:auto}.who-pin{position:relative;height:auto;display:block}
+    .who-pin>.wrap{padding:90px 20px 0;display:block}
+    .who-stage{flex:none;height:auto;min-height:560px;max-height:none}
+    .who-head{position:static;flex-direction:column;gap:4px;margin:0 0 18px;padding:0}
+    .who-copy{min-height:0;position:relative}
+    .who-block{position:relative;opacity:1;transform:none;display:none}.who-block.on{display:block}
+    .who-pad{position:relative;gap:30px;justify-content:flex-start}}
+
+  /* ============ HOW TO WORK WITH ME (pinned horizontal scroll) ============ */
+  .work{position:relative}
+  .work-track{height:300vh;position:relative}
+  .work-pin{position:sticky;top:0;height:100vh}
+  .work-pin>.wrap{position:relative;display:flex;flex-direction:column;height:100%;padding-top:92px;padding-bottom:34px}
+  .work-head{flex:none;margin-bottom:30px}
+  .work-head .work-sub{font-size:24px;font-weight:600;color:#a6a6a6;letter-spacing:-.02em;margin-top:14px}
+  .work-viewport{flex:1;min-height:0;display:flex;align-items:center;overflow:hidden}
+  .work-rail{display:flex;gap:20px;height:clamp(380px,58vh,540px);will-change:transform}
+  .wcard{flex:0 0 clamp(320px,31vw,440px);height:100%;position:relative;display:flex;flex-direction:column;background:#fff;border:1px solid #ececec;border-radius:var(--r-lg);padding:0;overflow:hidden;box-shadow:0 1px 2px rgba(16,19,25,.05)}
+  .wc-media{position:relative;flex:0 0 56%;overflow:hidden;background:#ececeb}
+  .wc-media img{width:100%;height:100%;object-fit:cover}
+  .wc-media::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:40%;background:linear-gradient(to bottom,transparent,#fff 94%);pointer-events:none;z-index:1}
+  .wc-tag{position:absolute;top:14px;right:14px;z-index:2;display:inline-flex;align-items:center;background:rgba(255,255,255,.92);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:var(--ink);font-size:12.5px;font-weight:600;letter-spacing:.01em;padding:7px 13px;border-radius:999px;box-shadow:0 2px 10px -5px rgba(0,0,0,.3)}
+  .wc-text{flex:1;min-height:0;display:flex;flex-direction:column;padding:12px 22px 20px;position:relative;z-index:1}
+  .wc-title{margin:0 0 12px;font-size:clamp(21px,1.9vw,24px);font-weight:600;line-height:1.1;letter-spacing:-.025em;color:var(--ink)}
+  .wc-desc{margin:0;font-size:15px;font-weight:500;line-height:1.4;letter-spacing:-.01em;color:var(--muted)}
+  .wc-meta{margin-top:auto;padding-top:16px;font-size:13px;font-weight:600;letter-spacing:.01em;color:#a6a6a6}
+  .wcard-contact{flex:0 0 clamp(440px,48vw,720px);display:block;background:#070909;border-color:#070909;color:#fff;padding:0;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.25)}
+  .wcc-body{height:100%;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;padding:50px 56px}
+  .wcc-eyebrow{font-size:24px;font-weight:500;letter-spacing:-.01em;color:rgba(255,255,255,.42);margin:0}
+  .wcc-title{color:#fff;font-size:32px;line-height:1.08;letter-spacing:-.02em;margin:0;font-weight:500}
+  .wcc-reassure{color:rgba(255,255,255,.5);font-size:18px;line-height:1.4;max-width:34ch;margin:16px 0 0;font-weight:450}
+  .wcc-foot{flex:none}
+  .wcc-divider{height:1px;background:rgba(255,255,255,.13);margin:0 0 28px}
+  .wcc-row{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  .wcc-row .who-mail{margin-top:0}
+  .wcc-cases{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:#fff;font-size:20px;font-weight:500;letter-spacing:-.01em}
+  .wcc-cases .lab{background-image:linear-gradient(#fff,#fff);background-position:0 100%;background-size:0% 1.5px;background-repeat:no-repeat;padding-bottom:3px;transition:background-size .4s var(--ease)}
+  .wcc-cases:hover .lab{background-size:100% 1.5px}
+  .wcc-cases svg{stroke:currentColor;flex:none;transition:transform .35s var(--ease)}
+  .wcc-cases:hover svg{transform:translate(3px,-3px)}
+  .work-progress{flex:none;margin-top:28px;height:2px;background:#e6e6e2;border-radius:2px;overflow:hidden}
+  .work-progress span{display:block;height:100%;width:0;background:var(--ink);border-radius:2px}
+  @media(max-width:860px){
+    .work-track{height:auto}
+    .work-pin{position:relative;height:auto}
+    .work-pin>.wrap{height:auto;display:block;padding:90px 20px 80px}
+    .work-viewport{display:block;overflow:visible}
+    .work-rail{flex-direction:column;height:auto;transform:none!important;gap:16px}
+    .wcard{flex:none;width:100%;height:auto;min-height:0;padding:12px}
+    .wc-media{flex:none;height:200px}
+    .wcard-contact{flex-direction:column;width:100%}
+    .wcc-media{flex:none;height:220px}
+    .wcc-body{padding:26px 24px 22px}
+    .work-progress{display:none}
+  }
+
+  /* ============ FORWARD PODCAST ============ */
+  .fwd{padding:60px 0 0}
+  .fwd-card{position:relative;overflow:hidden;background:#070909;color:#fff;border-radius:var(--r-lg);padding:60px 80px;min-height:480px}
+  .fwd-card h2{font-size:32px;font-weight:600;letter-spacing:-.02em;margin-bottom:26px}
+  .fwd-card .col{max-width:541px;position:relative;z-index:2}
+  .fwd-card p{font-size:16px;line-height:1.3;letter-spacing:-.02em;font-weight:500;margin-bottom:18px}
+  .fwd-card .guest-cta{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.1);color:#fff;border-radius:5px;padding:10px 15px;font-weight:500;font-size:16px;letter-spacing:-.02em;text-decoration:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.14),inset 0 0 0 1px rgba(255,255,255,.05);transition:background .3s var(--ease)}
+  .fwd-card .guest-cta svg{stroke:currentColor}
+  .fwd-card .guest-cta:hover{background:rgba(255,255,255,.18)}
+  .fwd-mark{position:absolute;right:40px;bottom:0;width:48%;max-width:600px;pointer-events:none;z-index:1}
+  .fwd-mark img{width:100%;display:block}
+  .fwd-platforms{display:flex;gap:20px;background:#070909;border-radius:var(--r-lg);margin-top:20px;padding:20px}
+  .fwd-platforms a{flex:1;display:flex;align-items:center;justify-content:center;gap:10px;background:rgba(255,255,255,.1);border-radius:5px;padding:10px 15px;color:#fff;font-weight:500;font-size:18px;letter-spacing:-.02em;text-decoration:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.14),inset 0 0 0 1px rgba(255,255,255,.05);transition:background .3s var(--ease)}
+  .fwd-platforms a:hover{background:rgba(255,255,255,.18)}
+  .fwd-platforms svg{width:32px;height:32px}
+  .fwd-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:20px}
+  .ep{display:flex;flex-direction:column;background:#070909;border-radius:var(--r-lg);padding:10px 10px 40px;transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
+  .ep:hover{transform:translateY(-5px);box-shadow:0 30px 60px -30px rgba(0,0,0,.6)}
+  .ep .cover{aspect-ratio:670/375;border-radius:15px;overflow:hidden;flex:none}
+  .ep .cover img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+  .ep:hover .cover img{transform:scale(1.05)}
+  .ep .body{display:flex;flex-direction:column;flex:1;padding:30px 10px 0}
+  .ep h3{font-size:20px;font-weight:600;line-height:1.3;letter-spacing:-.02em;color:#fff;margin-bottom:15px}
+  .ep .desc{font-size:16px;line-height:1.3;letter-spacing:-.02em;color:#bbb;margin-bottom:15px}
+  .ep .guest{font-size:14px;line-height:1.3;letter-spacing:-.02em;color:#fff}
+  .ep .guest b{font-weight:600}
+  .ep .acts{display:flex;gap:10px;margin-top:auto;padding-top:24px}
+  .ep .acts a{flex:1;display:flex;align-items:center;justify-content:center;gap:10px;padding:15px;border-radius:6px;font-weight:500;font-size:16px;letter-spacing:-.02em;text-decoration:none;transition:opacity .25s var(--ease)}
+  .ep .acts .watch{background:#fff;color:#070909}
+  .ep .acts .read{border:1px solid #fff;color:#fff}
+  .ep .acts a:hover{opacity:.82}
+  .ep .acts svg{width:24px;height:24px}
+  @media(max-width:1080px){.fwd-grid{grid-template-columns:repeat(2,1fr)}.fwd-card{grid-template-columns:1fr}.fwd-mark{position:relative;right:auto;width:100%;margin-top:30px}}
+  @media(max-width:680px){.fwd-grid,.fwd-platforms{grid-template-columns:1fr}.fwd-card{padding:36px 26px}.fwd-platforms a+a{border-left:0;border-top:1px solid rgba(255,255,255,.08)}}
+
+  /* ============ GOVERNMENT FREESTYLER (book) ============ */
+  .book{padding:120px 0 0}
+  .book-card{position:relative;overflow:hidden;border-radius:var(--r-lg);min-height:760px;background:#fff;display:flex}
+  .book-card>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+  .book-inner{position:relative;z-index:2;padding:60px 80px;max-width:660px;display:flex;flex-direction:column;align-items:flex-start;height:760px}
+  .book-inner h2{font-size:clamp(36px,4vw,50px);font-weight:500;letter-spacing:-.02em;line-height:1;color:var(--ink)}
+  .book-inner .coming{font-size:24px;font-weight:600;color:#a6a6a6;letter-spacing:-.02em;margin:14px 0 30px}
+  .book-inner p{font-size:16px;line-height:1.3;letter-spacing:-.02em;color:var(--muted);font-weight:500;max-width:520px;margin-bottom:18px}
+  .book-inner .self{margin-top:auto;font-size:18px;font-weight:600;color:#a6a6a6;letter-spacing:-.02em}
+  .book-inner .btn-dark{margin-top:24px}
+  @media(max-width:820px){.book-card{min-height:0}.book-inner{height:auto;padding:40px 26px 60px}.book-card>img{position:relative;height:300px;width:100%}.book-card{flex-direction:column}.book-card::before{display:none}}
+
+  /* ===== Government Freestyler popup (superpower.com-style) ===== */
+  .bmodal{position:fixed;inset:0;z-index:400;display:flex;align-items:center;justify-content:center;padding:clamp(16px,3vw,32px);
+    background:rgba(8,9,11,.5);-webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px);
+    opacity:0;visibility:hidden;transition:opacity .42s var(--ease),visibility 0s linear .42s}
+  .bmodal.open{opacity:1;visibility:visible;transition:opacity .42s var(--ease)}
+  .bmodal-card{position:relative;width:min(720px,100%);max-height:88vh;background:#fff;border-radius:26px;overflow:hidden;
+    box-shadow:0 50px 110px -34px rgba(8,9,11,.6);transform:translateY(28px) scale(.985);transition:transform .55s var(--ease)}
+  .bmodal.open .bmodal-card{transform:none}
+  .bmodal-scroll{max-height:88vh;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+  .bmodal-hero{position:relative;width:100%;height:clamp(180px,25vw,280px);overflow:hidden;background:#0e0e12}
+  .bmodal-hero img{width:100%;height:100%;object-fit:cover;object-position:center 26%;display:block}
+  .bmodal-x{position:absolute;top:18px;right:18px;z-index:5;width:42px;height:42px;border:0;border-radius:50%;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;background:rgba(8,9,11,.5);color:#fff;
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);transition:background .3s var(--ease),transform .45s var(--ease)}
+  .bmodal-x:hover{background:rgba(8,9,11,.82);transform:rotate(90deg)}
+  .bmodal-x svg{width:18px;height:18px;stroke:currentColor}
+  .bmodal-body{padding:clamp(28px,3.4vw,48px)}
+  .bm-eyebrow{font-size:13px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-bottom:16px}
+  .bm-title{font-size:clamp(28px,3.4vw,42px);font-weight:500;line-height:1.02;letter-spacing:-.025em;color:var(--ink);margin-bottom:26px}
+  .bmodal-body p{font-size:clamp(15px,1.05vw,16.5px);line-height:1.62;letter-spacing:-.011em;color:var(--muted);font-weight:500;margin-bottom:18px;max-width:62ch}
+  .bmodal-body p b{color:var(--ink);font-weight:600}
+  .bm-self{margin-top:28px;padding-top:22px;border-top:1px solid var(--line);font-size:16px;font-weight:600;color:#a6a6a6;letter-spacing:-.02em}
+  .bm-sub{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin:30px 0 12px}
+  .bm-creed{margin-top:34px;padding-top:28px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:16px}
+  .bm-creed p{font-size:clamp(17px,1.35vw,21px);line-height:1.28;letter-spacing:-.018em;color:var(--ink);font-weight:500;margin:0;max-width:none}
+  .bm-creed p.climax{font-size:clamp(20px,1.7vw,26px);line-height:1.2;letter-spacing:-.022em}
+  body.bmodal-open{overflow:hidden}
+  @media(prefers-reduced-motion:reduce){.bmodal,.bmodal-card{transition:opacity .2s linear}.bmodal-card{transform:none}}
+
+  /* ============ WHAT I'M BUILDING ============ */
+  .build{padding:120px 0 0}
+  .build-head{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:start;margin-bottom:50px}
+  .build-head .intro{font-size:16px;line-height:1.3;letter-spacing:-.02em;color:var(--muted);font-weight:500;max-width:520px}
+  .build-head .top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px}
+  .build-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+  .bcard{background:#fff;border:1px solid #efefef;border-radius:var(--r-lg);padding:10px 10px 40px;display:flex;flex-direction:column;transition:border-color .4s var(--ease),box-shadow .4s var(--ease),transform .5s var(--ease)}
+  .bcard:hover{border-color:#d8d8d4;box-shadow:0 28px 50px -36px rgba(16,19,25,.3);transform:translateY(-4px)}
+  .bcard .pic{height:380px;border-radius:10px;overflow:hidden;flex:none}
+  .bcard .pic img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+  .bcard:hover .pic img{transform:scale(1.04)}
+  .bcard .in{padding:30px 30px 0;display:flex;flex-direction:column;flex:1}
+  .bcard h3{font-size:24px;font-weight:600;letter-spacing:-.02em;color:var(--ink)}
+  .bcard .row{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:18px 0}
+  .bcard .row span{font-size:18px;font-weight:600;color:#a6a6a6;letter-spacing:-.02em;white-space:nowrap}
+  .bcard .row .ln{flex:1;height:1px;background:var(--line)}
+  .bcard p{font-size:16px;line-height:1.3;letter-spacing:-.02em;color:var(--muted);font-weight:500}
+  .bcard .note{color:#a6a6a6;font-weight:600;margin-top:18px}
+  .bcard .more{margin-top:auto;padding-top:28px;display:inline-flex;align-items:center;gap:18px;text-decoration:none}
+  .bcard .more .ed{width:12px;height:12px;border-radius:50%;background:#1ED760;flex:none}
+  .bcard .more span{font-size:18px;font-weight:600;color:#000;letter-spacing:-.02em;border-bottom:1.5px solid #000;padding-bottom:2px;transition:opacity .3s var(--ease)}
+  .bcard .more:hover span{opacity:.6}
+  @media(max-width:860px){.build-head{grid-template-columns:1fr}.build-grid{grid-template-columns:1fr}}
+
+  /* ============ WRITING & MEDIA ============ */
+  .media{padding:120px 0 0}
+  .media-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:50px}
+  .media-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px 20px}
+  .tile{display:flex;flex-direction:column;text-decoration:none}
+  .tile .pic{aspect-ratio:1;border-radius:30px;overflow:hidden;background:#e9e7e3}
+  .tile .pic img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
+  .tile:hover .pic img{transform:scale(1.05)}
+  .tile .tag{margin-top:18px;font-size:12px;font-weight:700;letter-spacing:normal;color:rgba(30,30,30,.4);text-transform:none}
+  .tile h3{margin-top:5px;font-size:22px;font-weight:600;line-height:1.4;letter-spacing:normal;color:var(--ink)}
+  @media(max-width:860px){.media-grid{grid-template-columns:1fr 1fr}}
+  @media(max-width:560px){.media-grid{grid-template-columns:1fr}}
+
+  /* ============ SUBSTACK ============ */
+  .substack{padding:120px 0 0}
+  .sub-card{position:relative;overflow:hidden;background:var(--accent);border-radius:var(--r-lg);min-height:658px;padding:80px;color:#fff}
+  .sub-card .bookmark{position:absolute;right:6%;top:50%;transform:translateY(-50%);width:564px;max-width:42%;pointer-events:none;z-index:1}
+  .sub-card .col{position:relative;z-index:2;max-width:660px}
+  .sub-card h2{font-size:clamp(34px,4vw,50px);font-weight:500;line-height:1.2;letter-spacing:-.02em;max-width:530px}
+  .sub-card .lead{font-size:16px;line-height:1.3;letter-spacing:-.02em;font-weight:500;margin:30px 0 40px;max-width:656px}
+  .sub-pill{display:inline-flex;align-items:center;gap:15px;background:#fff;border-radius:8px;padding:5px 20px 5px 5px;margin-bottom:9px;text-decoration:none;transition:transform .4s var(--ease)}
+  .sub-pill:hover{transform:translateX(6px)}
+  .sub-pill .ic{width:40px;height:40px;border-radius:5px;background:#070909;display:grid;place-items:center;flex:none}
+  .sub-pill .ic svg{width:14px;height:14px;stroke:#fff}
+  .sub-pill span{font-size:18px;font-weight:600;letter-spacing:-.02em;color:var(--ink)}
+  .sub-read{display:inline-flex;align-items:center;gap:10px;background:#0a0a0a;color:#fff;border-radius:6px;padding:15px;font-weight:500;font-size:16px;letter-spacing:-.02em;text-decoration:none;margin-top:25px;transition:opacity .3s var(--ease)}
+  .sub-read svg{width:14px;height:14px;stroke:currentColor}
+  .sub-read:hover{opacity:.85}
+  @media(max-width:820px){.sub-card{padding:40px 26px}.sub-card .bookmark{position:relative;right:auto;width:60%;max-width:280px;margin-top:30px}}
+
+  /* ============ LET'S TALK (footer) ============ */
+  .lets{padding:20px 0 40px}
+  .lets-card{position:relative;background:#070909;border-radius:var(--r-lg);min-height:435px;padding:60px 80px;color:#fff;display:flex;flex-direction:column}
+  .lets-top{display:flex;justify-content:space-between;align-items:flex-start;gap:40px;flex-wrap:wrap}
+  .lets-card h2{font-size:clamp(40px,5.4vw,70px);font-weight:500;line-height:1;letter-spacing:-.02em}
+  .lets-card .email{overflow-wrap:anywhere;font-size:clamp(28px,4.4vw,60px);font-weight:500;letter-spacing:-.02em;color:#fff;text-decoration:none;transition:opacity .3s var(--ease)}
+  .lets-card .email:hover{opacity:.7}
+  .lets-bottom{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;padding-top:50px}
+  .lets-nav{display:flex;flex-wrap:wrap;gap:30px}
+  .lets-nav a{font-size:clamp(16px,1.7vw,24px);font-weight:500;letter-spacing:-.02em;color:rgba(255,255,255,.4);text-decoration:none;transition:color .3s var(--ease)}
+  .lets-social{display:flex;gap:40px}
+  .lets-social a{font-size:clamp(20px,2.6vw,36px);font-weight:500;letter-spacing:-.02em;color:rgba(255,255,255,.4);text-decoration:none;transition:color .3s var(--ease)}
+  .lets-nav a:hover,.lets-social a:hover{color:#fff}
+  @media(max-width:820px){.lets-card{padding:40px 26px}.lets-top{flex-direction:column;gap:14px}}
+
+  footer{padding:0 0 60px;color:var(--muted-2);font-size:13px}
+
+  /* ============ MOTION (matteofabbiani-style) ============ */
+  html.lenis,html.lenis body{height:auto}
+  .lenis.lenis-smooth{scroll-behavior:auto !important}
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .85s var(--ease),transform .85s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.reveal{opacity:1 !important;transform:none !important;transition:none}}
+
+  /* ---- custom cursor (matteofabbiani-style: lerped ring, grows on hover) ---- */
+  .has-cursor,.has-cursor *{cursor:none !important}
+  .cursor{position:fixed;top:0;left:0;width:16px;height:16px;border-radius:50%;
+    background:#101319;border:0 solid #101319;
+    pointer-events:none;z-index:9999;transform:translate(-50%,-50%);will-change:transform,width,height,border-radius;
+    transition:width .35s var(--ease),height .35s var(--ease),border-radius .35s var(--ease),border-width .2s var(--ease),background-color .2s var(--ease),border-color .25s var(--ease),opacity .25s var(--ease)}
+  .cursor.inv{background:#fff;border-color:#fff}
+  .cursor.morph{background:transparent;border-width:1.5px}
+  .cursor.hidden{opacity:0}
+  /* magnetic buttons: unified transition incl. transform */
+  .btn-dark,nav .menu,.sub-read,.fwd-card .guest-cta,.wcard-contact .cases{transition:background-color .35s var(--ease),color .35s var(--ease),border-color .35s var(--ease),transform .4s var(--ease)}
+
+  /* ============ FULLSCREEN MENU ============ */
+  body.menu-open{overflow:hidden}
+  .m-overlay{position:fixed;inset:0;z-index:200;background:#070909;color:#fff;
+    display:flex;flex-direction:column;padding:20px 20px 22px;
+    transform:translateY(-100%);visibility:hidden;will-change:transform;
+    transition:transform .85s var(--ease-menu),visibility 0s linear .85s}
+  .m-overlay.open{transform:translateY(0);visibility:visible;
+    transition:transform .85s var(--ease-menu)}
+
+  .m-head{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;height:54px}
+  .m-logo{font-weight:500;font-size:24px;letter-spacing:-.48px;color:#fff}
+  .m-close{display:inline-flex;align-items:center;gap:10px;background:#fff;color:#000;
+    font-family:inherit;font-weight:500;font-size:16px;letter-spacing:-.02em;
+    padding:10px 15px;border:0;border-radius:5px;cursor:pointer;
+    transition:background-color .35s var(--ease),color .35s var(--ease),transform .4s var(--ease)}
+  .m-close:hover{background:#2c2c2c;color:#fff}
+  .m-close svg{stroke:currentColor}
+
+  .m-main{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:1.5fr .9fr;gap:48px;
+    align-content:safe center;padding:20px 0;overflow:auto;scrollbar-width:none}
+  .m-main::-webkit-scrollbar{display:none}
+
+  /* primary nav — masked ladder links */
+  .m-nav{display:flex;flex-direction:column;align-items:flex-start}
+  .m-link{display:inline-flex;align-items:center;gap:18px;text-decoration:none;color:#fff;
+    font-weight:500;font-size:clamp(22px,2.4vw,36px);line-height:1.2;letter-spacing:-.022em;
+    padding:2px 0;max-width:100%}
+  .m-mask{display:block;overflow:hidden;height:1.2em}
+  .m-rise{display:block;transform:translateY(118%);will-change:transform;
+    transition:transform .85s var(--ease)}
+  .m-overlay.open .m-rise{transform:translateY(0);transition-delay:calc(.12s + var(--i,0)*.045s)}
+  .m-ladder{display:block;will-change:transform;transition:transform .55s var(--ease)}
+  .m-txt{display:block;height:1.2em;line-height:1.2;color:rgba(255,255,255,.9)}
+  .m-txt + .m-txt{color:#fff}
+  .m-link:hover .m-txt{color:#fff}        /* calm hover: brighten + arrow only (no glitchy double-text roll) */
+  .m-arrow{display:none}
+  /* ---- richer main-link hover: slide right + arrow reveal + sibling dim ---- */
+  .m-link{position:relative}
+  .m-mask{transition:transform .55s var(--ease)}
+  .m-txt{color:#fff;transition:color .35s var(--ease)}
+  .m-txt + .m-txt{display:none}
+  .m-nav:hover .m-link .m-txt{color:rgba(255,255,255,.4)}
+  .m-nav .m-link:hover .m-txt{color:#fff}
+  .m-link:hover .m-mask{transform:translateX(42px)}
+  .m-link::before{content:"";position:absolute;left:2px;top:50%;width:22px;height:22px;
+    transform:translate(-16px,-50%) scale(.6);opacity:0;pointer-events:none;
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 17 17 7M9 7h8v8'/%3E%3C/svg%3E") no-repeat center/22px;
+    transition:transform .5s var(--ease),opacity .4s var(--ease)}
+  .m-link:hover::before{transform:translate(0,-50%) scale(1);opacity:1}
+  @media(prefers-reduced-motion:reduce){.m-link:hover .m-mask{transform:none}.m-link::before{display:none}}   /* removed — was reading as a glitch on hover */
+  .m-arrow svg{width:100%;height:100%;stroke:#fff}
+  .m-link:hover .m-arrow{opacity:1;transform:translateX(0)}
+
+  /* pages group — prominent standalone-page destinations (Full bio / Signature Cases) */
+  .m-pages{display:flex;flex-direction:column;align-items:flex-start;gap:2px;
+    margin-top:24px;padding-top:22px;border-top:1px solid rgba(255,255,255,.12);
+    width:100%;max-width:560px}
+  .m-plabel{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    color:rgba(255,255,255,.34);margin-bottom:10px}
+  .m-link.pg{font-size:clamp(18px,2vw,28px)}
+  .m-link.pg .m-txt{color:rgba(255,255,255,.82)}
+  .m-link.pg .m-txt + .m-txt{color:#fff}
+  .m-link.pg[aria-current="page"]{pointer-events:none}
+  .m-link.pg[aria-current="page"] .m-txt{color:rgba(255,255,255,.4)}
+
+  /* side column */
+  .m-side{display:flex;flex-direction:column;gap:32px;align-self:center;
+    border-left:1px solid rgba(255,255,255,.12);padding-left:48px}
+  .m-group{display:flex;flex-direction:column;gap:12px}
+  .m-label{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    color:rgba(255,255,255,.34);margin-bottom:2px}
+  .m-slink{display:inline-flex;align-items:center;justify-content:space-between;gap:16px;
+    max-width:340px;text-decoration:none;color:rgba(255,255,255,.7);
+    font-size:17px;font-weight:500;letter-spacing:-.015em;transition:color .3s var(--ease)}
+  .m-slink .tx{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .m-slink .ar{flex:0 0 auto;opacity:0;transform:translateX(-6px);
+    transition:opacity .35s var(--ease),transform .35s var(--ease)}
+  .m-slink .ar svg{width:13px;height:13px;stroke:currentColor;display:block}
+  .m-slink:hover{color:#fff}
+  .m-slink:hover .ar{opacity:1;transform:translateX(0)}
+
+  /* footer */
+  .m-foot{flex:0 0 auto;display:flex;align-items:flex-end;justify-content:space-between;gap:24px;
+    border-top:1px solid rgba(255,255,255,.12);padding-top:22px}
+  .m-email{overflow-wrap:anywhere;text-decoration:none;color:#fff;font-weight:500;font-size:clamp(26px,3.6vw,52px);
+    line-height:1;letter-spacing:-.025em;transition:opacity .3s var(--ease)}
+  .m-email:hover{opacity:.65}
+  .m-meta{font-size:14px;color:rgba(255,255,255,.4);text-align:right;line-height:1.45}
+
+  /* entrance — non-masked blocks */
+  .m-pages .m-plabel,.m-group,.m-foot>*{opacity:0;transform:translateY(22px);
+    transition:opacity .7s var(--ease),transform .7s var(--ease)}
+  .m-overlay.open .m-pages .m-plabel,
+  .m-overlay.open .m-group,
+  .m-overlay.open .m-foot>*{opacity:1;transform:translateY(0);
+    transition-delay:calc(.14s + var(--i,0)*.045s)}
+
+  @media(max-width:900px){
+    .m-main{display:grid;grid-template-columns:1.15fr .85fr;gap:14px 18px;align-content:start;flex:none}
+    .m-nav{grid-column:1;grid-row:1}
+    .m-side{display:contents}
+    .m-side .m-group{gap:8px}
+    .m-side .m-group:first-child{grid-column:2;grid-row:1;align-self:start}
+    .m-side .m-group:last-child{grid-column:1 / -1;grid-row:2;border-top:1px solid rgba(255,255,255,.12);padding-top:16px;margin-top:8px}
+    .m-foot{flex-direction:column;align-items:flex-start;gap:14px}
+    .m-meta{text-align:left;font-size:12px}
+    .m-slink{font-size:15px}
+    .m-email{font-size:22px}
+    .m-label{margin-bottom:0}
+  }
+
+  /* ============ PRELOADER + INTRO MOTION ============ */
+  body.preloading{overflow:hidden}
+  .pl{position:fixed;inset:0;z-index:300;background:#070909;color:#fff;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
+    will-change:transform}
+  .pl.done{transform:translateY(-100%);transition:transform .95s var(--ease-menu)}
+  .pl-mark{overflow:hidden;padding-bottom:.06em}
+  .pl-mark span{display:block;font-weight:500;font-size:clamp(30px,5.2vw,58px);letter-spacing:-.03em;
+    transform:translateY(112%);transition:transform .9s var(--ease-menu) .12s}
+  .pl.in .pl-mark span{transform:translateY(0)}
+  .pl-bar{position:relative;width:min(240px,42vw);height:1px;background:rgba(255,255,255,.16);overflow:hidden}
+  .pl-bar i{position:absolute;inset:0;background:#fff;transform-origin:left center;transform:scaleX(0)}
+  .pl-cap{font-size:13px;letter-spacing:.05em;color:rgba(255,255,255,.42);
+    opacity:0;transform:translateY(8px);
+    transition:opacity .7s var(--ease) .3s,transform .7s var(--ease) .3s}
+  .pl.in .pl-cap{opacity:1;transform:translateY(0)}
+  .pl.leaving .pl-mark span,.pl.leaving .pl-cap{opacity:0;transform:translateY(-14px);
+    transition:opacity .42s var(--ease),transform .55s var(--ease)}
+  .pl.leaving .pl-bar{opacity:0;transition:opacity .42s var(--ease)}
+  @media(prefers-reduced-motion:reduce){.pl{display:none}}
+
+  /* hero headline — masked word reveal (compositor CSS) */
+  .hero-top h1.split{display:block}
+  .hero-top h1 .wmask{display:inline-block;overflow:hidden;vertical-align:top;
+    padding-bottom:.14em;margin-bottom:-.14em}
+  .hero-top h1 .wrise{display:inline-block;will-change:transform}
+  /* hidden states armed only while JS intro runs (fallback-safe) */
+  html.js-intro .hero-top h1 .wrise{transform:translateY(122%);
+    transition:transform .95s var(--ease-menu);transition-delay:calc(.15s + var(--wi,0)*.05s)}
+  html.js-intro .hero-lead,html.js-intro .hero-desc{opacity:0;transform:translateY(26px);
+    transition:opacity .9s var(--ease),transform .9s var(--ease)}
+  html.js-intro .hero-lead{transition-delay:.42s}
+  html.js-intro .hero-desc{transition-delay:.52s}
+  html.js-intro .hero-card{opacity:0;transform:translateY(46px);
+    transition:opacity 1.1s var(--ease) .58s,transform 1.1s var(--ease) .58s}
+  html.js-intro nav.bar{opacity:0;transform:translateY(-16px);
+    transition:opacity .8s var(--ease),transform .8s var(--ease)}
+  /* revealed (placed after js-intro so it wins the tie) */
+  body.hero-in .hero-top h1 .wrise{transform:translateY(0)}
+  body.hero-in .hero-lead,body.hero-in .hero-desc{opacity:1;transform:none}
+  body.hero-in .hero-card{opacity:1;transform:none}
+  body.hero-in nav.bar{opacity:1;transform:none}
+
+  /* tasteful image scale-in inside revealed cards */
+  .tile .pic img,.ep.reveal img,.bcard.reveal img{transform:scale(1.06);
+    transition:transform 1.2s var(--ease)}
+  .tile.in .pic img,.ep.in img,.bcard.in img{transform:scale(1)}
+  @media(prefers-reduced-motion:reduce){.tile .pic img,.ep img,.bcard img{transform:none!important}}
+
+  /* ============ RESPONSIVE FIXES (multi-agent audit 2026-06-21) ============ */
+  @media(max-width:1024px){
+    .sub-card .lead{max-width:62ch}
+  }
+  @media(max-width:900px){
+    nav .inner{justify-content:space-between}                 /* Menu CTA back to the right when links hide */
+    .m-overlay{overflow-y:auto}                                /* whole menu scrolls on short screens */
+    .m-main{overflow:visible}
+    .m-foot{padding-top:14px}
+    .m-nav{gap:2px}
+    .m-link{padding:3px 0;font-size:20px;line-height:1.2}                                     /* >=44px tap rows */
+    .fwd-platforms{flex-wrap:wrap}                             /* podcast pills 3 -> 2 */
+    .fwd-platforms a{flex:1 1 calc(50% - 10px)}
+  }
+  @media(max-width:860px){
+    .who-stage{overflow:hidden;height:auto;max-height:none}  /* keep rounded corners (copy flows via relative who-pad) */
+    .who-head .t{font-size:clamp(30px,8vw,40px)}
+    .who-index button{min-height:44px;padding:11px 0}
+    .who-mail{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(10,10,12,.6)}  /* drop mobile blur jank */
+    .wc-tag{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(255,255,255,.96)}
+    .wcc-eyebrow{font-size:18px}
+    .wcc-title{font-size:26px}
+    .wcc-reassure{font-size:16px;max-width:none}
+    .wcc-row{flex-direction:column;align-items:flex-start;gap:18px}
+    .wcc-cases{font-size:17px}
+    .fwd-card{padding:44px 40px}
+  }
+  @media(max-width:820px){
+    .tiles{grid-template-columns:1fr}                          /* one glass tile column on tablet */
+  }
+  @media(max-width:768px){
+    .meet{padding-top:72px}
+  }
+  @media(max-width:680px){
+    .fwd-platforms{flex-direction:column}                      /* pills 2 -> 1 (fixes the no-op grid rule) */
+    .fwd-platforms a{flex:1 1 auto;font-size:16px}
+    .fwd-card{padding:36px 24px}
+  }
+  @media(max-width:560px){
+    .recog .label{font-size:18px;padding-right:14px}           /* stop label crushing the marquee */
+    .recog .row.r2 .label{padding-left:14px}
+    .recog .track-wrap::before,.recog .track-wrap::after{width:48px}
+    .recog .chip{font-size:16px}
+    .recog .track{gap:16px}
+    .recog .dot{width:7px;height:7px}
+    .recog .row{height:72px}
+    .meet-grid>*{min-width:0}                                 /* let collapsed grid column shrink below content */
+    .quote-pill{width:100%;height:auto;min-height:80px;padding-top:14px;padding-bottom:14px}  /* was width:500px -> page overflow */
+    .quote-pill span{font-size:18px}
+    .hero-portrait{height:300px}
+    .sub-pill{align-items:flex-start;padding:8px 16px 8px 8px}
+    .sub-pill .ic{margin-top:1px}
+    .sub-pill span{font-size:16px;line-height:1.25}
+    .lets-social{flex-wrap:wrap;gap:14px 20px}.lets-nav{gap:12px 18px}.lets-bottom{flex-direction:column;align-items:flex-start}               /* 4 links wrap instead of overflowing the row */
+    .lets-bottom{gap:20px}
+  }
+  @media(max-width:480px){
+    .bcard .row{flex-direction:column;align-items:flex-start;gap:6px}
+    .bcard .row .ln{display:none}
+  }
+
+  /* ============ MOBILE POLISH (phone QA — pravky.pdf) ============ */
+  @media(max-width:980px){
+    .meet-left .quote-pill{margin:clamp(26px,4vw,34px) 0}           /* 4: breathe between heading / quote / buttons */
+    .meet-cta{margin-top:4px}
+  }
+  @media(max-width:860px){
+    .ep .acts{flex-direction:column;gap:12px}                       /* 7: episode buttons stack, one under another */
+    .ep .acts a{flex:none;width:100%}
+    .wc-media{border-radius:var(--r-md)}                            /* 6: round the inset card images */
+    .media-head{flex-direction:column;align-items:flex-start;gap:18px}  /* 9: Writing & Media heading over the View All button */
+  }
+  @media(max-width:820px){
+    .book-inner .self{margin-top:22px}                              /* 8: gap between Full Info and the self note */
+    .sub-card .bookmark{display:block;margin:6px auto 26px;right:auto;top:auto;transform:none;width:40%;max-width:172px}  /* 10: smaller, centred, balanced glass bookmark */
+  }
+  @media(max-width:560px){
+    .sub-pill{align-items:center}                                   /* 11: pill text vertically centred (was top) */
+    .sub-pill .ic{margin-top:0}
+    .hero-card{flex-direction:column}                               /* 3: content first, portrait pinned to the bottom, centred */
+    .hero-content{order:1}
+    .hero-portrait{order:2;height:360px}
+    .hero-portrait img{object-position:99% 50%}   /* subject sits at canvas 60.8% -> 99% centres her in the frame */
+  }
+</style>
+</head>
+<body>
+
+  <!-- PRELOADER -->
+  <div class="pl" id="preloader">
+    <div class="pl-mark"><span>Valeriya Ionan</span></div>
+    <div class="pl-bar"><i></i></div>
+    <div class="pl-cap">Government &amp; business innovator</div>
+  </div>
+
+  <!-- NAV -->
+  <nav class="bar"><div class="wrap"><div class="inner">
+    <span class="logo">Valeriya Ionan</span>
+    <div class="links"><a href="bio.html">Bio</a><a href="#work">Work</a><a href="#forward">Forward</a><a href="writing.html">Writing &amp; Media</a><a href="contacts.html">Contact</a></div>
+    <a class="mail" href="mailto:hello@ionan.global">hello@ionan.global</a>
+    <span class="menu"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>Menu</span>
+  </div></div></nav>
+
+  <!-- HERO -->
+  <section class="hero" id="bio"><div class="wrap">
+    <div class="hero-top">
+      <h1>Government &amp; business innovator</h1>
+      <div>
+        <p class="hero-lead">A bridge between governments, builders and the futures they need to build.</p>
+        <p class="hero-desc">Building digital and agentic states, livable cities of the future and innovation systems for what comes next. Advising governments, tech leaders and founders across the world. Turning bold ideas into systems.</p>
+      </div>
+    </div>
+
+    <div class="hero-card">
+      <div class="hero-portrait">
+        <img src="img/figma/246b72e8-2afe-4284-83ac-d636f1e89596.png" alt="Valeriya Ionan" />
+      </div>
+      <div class="hero-content">
+        <div class="hero-quote">
+          <div class="qmarks"><svg viewBox="0 0 40 30" width="40" height="30"><path d="M0 30L8.73908 0H17.8777L13.4831 30H0ZM22.1223 30L30.8614 0H40L35.6055 30H22.1223Z" fill="#fff" fill-opacity=".2"/></svg><svg viewBox="0 0 40 30" width="40" height="30"><path d="M0 30L4.46134 0H18.1496L9.27757 30H0ZM21.8504 30L26.3118 0H40L31.128 30H21.8504Z" fill="#fff" fill-opacity=".2"/></svg></div>
+          <h2>I architect the systems that make transformation irreversible</h2>
+          <p>Governments, visionary companies and bold founders work with me when a transformation has to be irreversible.</p>
+        </div>
+        <div class="tiles">
+          <div class="ctile">
+            <div>
+              <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="#fff"><path d="M22.2234 0H1.77187C0.792187 0 0 0.773438 0 1.72969V22.2656C0 23.2219 0.792187 24 1.77187 24H22.2234C23.2031 24 24 23.2219 24 22.2703V1.72969C24 0.773438 23.2031 0 22.2234 0ZM7.12031 20.4516H3.55781V8.99531H7.12031V20.4516ZM5.33906 7.43438C4.19531 7.43438 3.27188 6.51094 3.27188 5.37187C3.27188 4.23281 4.19531 3.30937 5.33906 3.30937C6.47813 3.30937 7.40156 4.23281 7.40156 5.37187C7.40156 6.50625 6.47813 7.43438 5.33906 7.43438ZM20.4516 20.4516H16.8937V14.8828C16.8937 13.5563 16.8703 11.8453 15.0422 11.8453C13.1906 11.8453 12.9094 13.2938 12.9094 14.7891V20.4516H9.35625V8.99531H12.7687V10.5609H12.8156C13.2891 9.66094 14.4516 8.70938 16.1813 8.70938C19.7859 8.70938 20.4516 11.0813 20.4516 14.1656V20.4516Z"/></svg></div>
+              <h3>Follow Me on LinkedIn</h3>
+              <p>For the work in progress: frontier government, agentic state, defense-tech, innovations and global partnerships.</p>
+            </div>
+            <a class="cta" href="https://www.linkedin.com/in/valeriyaionan/" target="_blank" rel="noopener">Follow</a>
+          </div>
+          <div class="ctile">
+            <div>
+              <div class="ic"><svg width="24" height="24" viewBox="0 0 22 18" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 15 13.857 9M8.143 9 1.5 15M1 4l8.165 5.715c.661.463.992.695 1.351.784.318.08.65.08.968 0 .36-.09.69-.32 1.351-.784L21 4M5.8 17h10.4c1.68 0 2.52 0 3.162-.327a3 3 0 0 0 1.311-1.311C21 14.72 21 13.88 21 12.2V5.8c0-1.68 0-2.52-.327-3.162a3 3 0 0 0-1.311-1.311C18.72 1 17.88 1 16.2 1H5.8c-1.68 0-2.52 0-3.162.327a3 3 0 0 0-1.311 1.311C1 3.28 1 4.12 1 5.8v6.4c0 1.68 0 2.52.327 3.162a3 3 0 0 0 1.311 1.311C3.28 17 4.12 17 5.8 17Z"/></svg></div>
+              <h3>Need to talk about something specific?</h3>
+              <p>Book a strategic conversation.</p>
+            </div>
+            <a class="cta" href="mailto:hello@ionan.global">hello@ionan.global</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- MEET THE ARCHITECT -->
+  <section class="meet"><div class="wrap">
+    <div class="meet-grid">
+      <div class="meet-left">
+        <h2 class="sec-title">Meet the architect</h2>
+        <div class="quote-pill">
+          <img class="qic" src="img/figma/828762dd-54e3-4a3e-a7e4-61ff205ee6e3.svg" alt="" />
+          <span>I don’t consult. I co-create.</span>
+        </div>
+        <div class="meet-cta">
+          <a class="btn-dark" href="bio.html">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg></span>Read full bio
+          </a>
+          <button class="btn-line" id="philoBtn" type="button">
+            <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.4L19 10l-5.1 1.6L12 17l-1.9-5.4L5 10l5.1-1.6z"/></svg></span>Philosophy
+          </button>
+        </div>
+      </div>
+      <div class="meet-right">
+        <p class="bio-lead">Former Deputy Minister of Digital Transformation of Ukraine (2019–2025). Co-architect of the Diia ecosystem (Diia.Education, Diia.Business, Diia.Hromada), WINWIN Ukraine’s Global Innovation Strategy, CDTO Campus and GGTC Kyiv. Led Ukraine’s position from Ministry of Digital Transformation in the Tallinn Mechanism, the international coalition supporting Ukraine’s cyber resilience. Led Ukraine’s EU accession negotiations on the Digital and Media chapter (Chapter 10), international cooperation and regional digital transformation. Former Strategic Advisor to the First Deputy Prime Minister of Ukraine.</p>
+        <p class="bio-sub">Before government, a tech entrepreneur in marketing, education and media. Today, I work with Ukraine’s Ministries of Digital Transformation and Defense and with leaders shaping public-sector innovation worldwide, championing the brand of digital Ukraine globally, promoting partnership, innovation and investment between Ukraine and the world and building digital products.</p>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- RECOGNIZED BY -->
+  <section class="recog"><div class="wrap">
+    <div class="row r1">
+      <div class="label l1">Recognized by</div>
+      <div class="track-wrap"><div class="track">
+        <span class="chip">Sifted 100 Women in Tech in Europe 2025</span><span class="dot"></span>
+        <span class="chip">Apolitical Government AI 100</span><span class="dot"></span>
+        <span class="chip">UP 100</span><span class="dot"></span>
+        <span class="chip">Vogue Leaders Ukraine</span><span class="dot"></span>
+        <span class="chip">Mastercard Legacy</span><span class="dot"></span>
+        <span class="chip">Sifted 100 Women in Tech in Europe 2025</span><span class="dot"></span>
+        <span class="chip">Apolitical Government AI 100</span><span class="dot"></span>
+        <span class="chip">UP 100</span><span class="dot"></span>
+        <span class="chip">Vogue Leaders Ukraine</span><span class="dot"></span>
+        <span class="chip">Mastercard Legacy</span><span class="dot"></span>
+      </div></div>
+    </div>
+    <div class="row r2">
+      <div class="label">Fellowships &amp; Advisory</div>
+      <div class="track-wrap"><div class="track">
+        <span class="chip">Non-Resident Senior Fellow, Atlantic Council</span><span class="dot"></span>
+        <span class="chip">Senior Fellow, Friends of Europe</span><span class="dot"></span>
+        <span class="chip">European Young Leader 40</span><span class="dot"></span>
+        <span class="chip">Yale Peace Fellow 2025</span><span class="dot"></span>
+        <span class="chip">ISF Fellow 2025</span><span class="dot"></span>
+        <span class="chip">Berlin Global Dialogue</span><span class="dot"></span>
+        <span class="chip">Contributor to the Agentic State Paper</span><span class="dot"></span>
+        <span class="chip">Non-Resident Senior Fellow, Atlantic Council</span><span class="dot"></span>
+        <span class="chip">Senior Fellow, Friends of Europe</span><span class="dot"></span>
+        <span class="chip">European Young Leader 40</span><span class="dot"></span>
+        <span class="chip">Yale Peace Fellow 2025</span><span class="dot"></span>
+        <span class="chip">ISF Fellow 2025</span><span class="dot"></span>
+        <span class="chip">Berlin Global Dialogue</span><span class="dot"></span>
+        <span class="chip">Contributor to the Agentic State Paper</span><span class="dot"></span>
+      </div></div>
+    </div>
+  </div></section>
+
+  <!-- WHO I WORK WITH — pinned scroll-sequence (superpower.com style) -->
+  <section class="who" id="work"><div class="who-track"><div class="who-pin"><div class="wrap">
+    <div class="who-head">
+      <span class="t">Who I work with</span>
+    </div>
+    <div class="who-stage">
+      <div class="who-bg">
+        <img loading="lazy" decoding="async" class="on" data-step="0" src="img/figma/a8c0a0ff-1a7c-43f4-94a4-a8ba8d119d77.jpg" alt="" />
+        <img loading="lazy" decoding="async" data-step="1" src="img/figma/2bbe3fb7-029a-41cd-9253-6603c9c74c6a.jpg" alt="" />
+        <img loading="lazy" decoding="async" data-step="2" src="img/figma/3a27edbb-d7d6-4aef-9598-4306e649cfb2.jpg" alt="" />
+      </div>
+      <div class="who-shade"></div>
+      <div class="who-pad">
+        <div class="who-copy">
+          <div class="who-block on" data-step="0">
+            <h3>Governments building the future</h3>
+            <p><span class="lead">Designing digital and agentic states, creating innovation ecosystems and preparing institutions, businesses and citizens for the next decade.</span></p>
+            <p>Ministries, presidential offices and reform agencies designing the next decade of statecraft — the vision of a digital or agentic state, the digital products and innovation systems behind it, and the organizations that make it real.</p>
+            <p>I have done this from the inside, under pressure most teams will never face. I can compress your learning curve from years to months.</p>
+          </div>
+          <div class="who-block" data-step="1">
+            <h3>Global &amp; Ukraine 🇺🇦</h3>
+            <p><span class="lead">For global tech and investors entering Ukraine — and for Ukrainian companies going global.</span></p>
+            <p><strong>Entering Ukraine.</strong> Committing capital, infrastructure or product in defense-tech, AI, dual-use, GovTech or talent? I help you design the partnership stacks — which moves create irreversible advantage versus burn cash on the wrong door.</p>
+            <p><strong>Going global from Ukraine.</strong> Breaking into new markets or building partnerships beyond Ukraine? I help you design the route: which doors to open, which positioning works, which signals matter to the right buyers and capital.</p>
+          </div>
+          <div class="who-block" data-step="2">
+            <h3>Visionaries</h3>
+            <p><span class="lead">Founders, bold thinkers and changemakers building at the intersection of technology, policy and purpose.</span></p>
+            <p>Projects that need to work at frontier conditions and scale far beyond them. I work with the people whose vision exceeds what their resources currently allow.</p>
+            <p>I also occasionally work with international organizations and foundations. Not sure whether we fit? Write to me — if I’m not the right partner, I’ll introduce you to someone who is.</p>
+            <a class="who-mail" href="mailto:hello@ionan.global"><svg viewBox="0 0 22 18" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 15 13.857 9M8.143 9 1.5 15M1 4l8.165 5.715c.661.463.992.695 1.351.784.318.08.65.08.968 0 .36-.09.69-.32 1.351-.784L21 4M5.8 17h10.4c1.68 0 2.52 0 3.162-.327a3 3 0 0 0 1.311-1.311C21 14.72 21 13.88 21 12.2V5.8c0-1.68 0-2.52-.327-3.162a3 3 0 0 0-1.311-1.311C18.72 1 17.88 1 16.2 1H5.8c-1.68 0-2.52 0-3.162.327a3 3 0 0 0-1.311 1.311C1 3.28 1 4.12 1 5.8v6.4c0 1.68 0 2.52.327 3.162a3 3 0 0 0 1.311 1.311C3.28 17 4.12 17 5.8 17Z"/></svg>hello@ionan.global</a>
+          </div>
+        </div>
+        <div class="who-index">
+          <button data-go="0" class="on"><span class="bar"></span>01 — Governments</button>
+          <button data-go="1"><span class="bar"></span>02 — Global &amp; Ukraine</button>
+          <button data-go="2"><span class="bar"></span>03 — Visionaries</button>
+        </div>
+      </div>
+    </div>
+  </div></div></div></section>
+
+  <!-- HOW TO WORK WITH ME — pinned horizontal scroll (last card = contact) -->
+  <section class="work" id="services">
+    <div class="work-track">
+      <div class="work-pin"><div class="wrap">
+        <div class="work-head">
+          <h2 class="sec-title">How to work with me</h2>
+          <p class="work-sub">Four ways, depending on the depth and the stakes.</p>
+        </div>
+        <div class="work-viewport">
+          <div class="work-rail">
+            <article class="wcard">
+              <div class="wc-media"><img src="img/figma/htw-01.jpg" alt="" loading="lazy"><span class="wc-tag">Advisory</span></div>
+              <div class="wc-text">
+                <h3 class="wc-title">Strategic Advisory Board seat</h3>
+                <p class="wc-desc">A board or committee seat at a transformation that needs senior strategic counsel over years, not a project. Limited to a handful of organizations at a time.</p>
+                <span class="wc-meta">By introduction</span>
+              </div>
+            </article>
+            <article class="wcard">
+              <div class="wc-media"><img src="img/figma/htw-02.jpg" alt="" loading="lazy"><span class="wc-tag">Programs</span></div>
+              <div class="wc-text">
+                <h3 class="wc-title">Global program &amp; project work</h3>
+                <p class="wc-desc">A defined transformation — a digital or agentic state design, a flagship innovation program — co-led with my Supersonic Execution Office: strategists, designers, technologists and policy partners across several countries.</p>
+                <span class="wc-meta">3–12 months</span>
+              </div>
+            </article>
+            <article class="wcard">
+              <div class="wc-media"><img src="img/figma/htw-03.jpg" alt="" loading="lazy"><span class="wc-tag">Speaking</span></div>
+              <div class="wc-text">
+                <h3 class="wc-title">Keynote, Workshop or Briefing</h3>
+                <p class="wc-desc">A speech, a closed-room session for a leadership team, or a 1–2 day intensive. The fastest way to bring my thinking into your organization.</p>
+                <span class="wc-meta">Available globally</span>
+              </div>
+            </article>
+            <article class="wcard">
+              <div class="wc-media"><img src="img/figma/htw-04.jpg" alt="" loading="lazy"><span class="wc-tag">Consulting</span></div>
+              <div class="wc-text">
+                <h3 class="wc-title">Strategic Consultation</h3>
+                <p class="wc-desc">A focused 90-minute session on a specific question — a strategy review, a partnership decision, a market-entry choice. You leave with a written memo and concrete recommendations.</p>
+                <span class="wc-meta">By appointment · 90 min</span>
+              </div>
+            </article>
+            <article class="wcard wcard-contact">
+              <div class="wcc-body">
+                <span class="wcc-eyebrow">Not sure which fits?</span>
+                <div class="wcc-main">
+                  <h3 class="wcc-title">Start the conversation</h3>
+                  <p class="wcc-reassure">Write to me — if I’m not the right partner, I’ll introduce you to someone who is.</p>
+                </div>
+                <div class="wcc-foot">
+                  <div class="wcc-divider"></div>
+                  <div class="wcc-row">
+                    <a class="who-mail" href="mailto:hello@ionan.global"><svg viewBox="0 0 22 18" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 15 13.857 9M8.143 9 1.5 15M1 4l8.165 5.715c.661.463.992.695 1.351.784.318.08.65.08.968 0 .36-.09.69-.32 1.351-.784L21 4M5.8 17h10.4c1.68 0 2.52 0 3.162-.327a3 3 0 0 0 1.311-1.311C21 14.72 21 13.88 21 12.2V5.8c0-1.68 0-2.52-.327-3.162a3 3 0 0 0-1.311-1.311C18.72 1 17.88 1 16.2 1H5.8c-1.68 0-2.52 0-3.162.327a3 3 0 0 0-1.311 1.311C1 3.28 1 4.12 1 5.8v6.4c0 1.68 0 2.52.327 3.162a3 3 0 0 0 1.311 1.311C3.28 17 4.12 17 5.8 17Z"/></svg>hello@ionan.global</a>
+                    <a class="wcc-cases" href="cases.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg><span class="lab">Read my Signature Cases</span></a>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+        <div class="work-progress"><span></span></div>
+      </div></div>
+      <span id="contact" style="position:absolute;left:0;bottom:6vh;width:1px;height:1px;pointer-events:none"></span>
+    </div>
+  </section>
+
+  <!-- FORWARD PODCAST -->
+  <section class="fwd" id="forward"><div class="wrap">
+    <div class="fwd-card">
+      <div class="col">
+        <h2>FORWARD podcast</h2>
+        <p>FORWARD with Valeriya Ionan. A global podcast where innovation meets diplomacy. A project for global investors, founders, policymakers and executives who want practical insight on entering Ukraine and helping Ukrainian companies scale globally.</p>
+        <p>FORWARD is open to partnerships with brands, companies and organizations working at the intersection of technology, governance and global investment. If you’re building something that matters and want to reach an audience of decision-makers, investors and policy leaders, let’s talk.</p>
+        <p>Become a guest or nominate someone for Season 1. Partner with the project.</p>
+        <a class="who-mail" href="mailto:hello@ionan.global"><svg viewBox="0 0 22 18" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 15 13.857 9M8.143 9 1.5 15M1 4l8.165 5.715c.661.463.992.695 1.351.784.318.08.65.08.968 0 .36-.09.69-.32 1.351-.784L21 4M5.8 17h10.4c1.68 0 2.52 0 3.162-.327a3 3 0 0 0 1.311-1.311C21 14.72 21 13.88 21 12.2V5.8c0-1.68 0-2.52-.327-3.162a3 3 0 0 0-1.311-1.311C18.72 1 17.88 1 16.2 1H5.8c-1.68 0-2.52 0-3.162.327a3 3 0 0 0-1.311 1.311C1 3.28 1 4.12 1 5.8v6.4c0 1.68 0 2.52.327 3.162a3 3 0 0 0 1.311 1.311C3.28 17 4.12 17 5.8 17Z"/></svg>hello@ionan.global</a>
+      </div>
+      <div class="fwd-mark"><img loading="lazy" decoding="async" src="img/figma/forward-mark.png" alt="FORWARD with Valeriya Ionan" /></div>
+    </div>
+
+    <div class="fwd-platforms">
+      <a href="https://youtube.com/@forwardwithvaleriya" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="#FF0000"><path d="M23 12s0-3.6-.46-5.3a2.8 2.8 0 0 0-2-2C18.8 4.2 12 4.2 12 4.2s-6.8 0-8.54.5a2.8 2.8 0 0 0-2 2C1 8.4 1 12 1 12s0 3.6.46 5.3a2.8 2.8 0 0 0 2 2c1.74.5 8.54.5 8.54.5s6.8 0 8.54-.5a2.8 2.8 0 0 0 2-2C23 15.6 23 12 23 12z"/><path d="M9.75 15.5v-7l6 3.5-6 3.5z" fill="#fff"/></svg>Watch on YouTube</a>
+      <a href="https://open.spotify.com/show/2bxqMLFejXFe8lapEARLWa" target="_blank" rel="noopener"><svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="14" fill="#1ED760"/><path d="M22.3643 21.623C22.1252 22.0025 21.6149 22.1087 21.2163 21.881C18.075 20.0593 14.1364 19.6494 9.48023 20.6514C9.03375 20.7425 8.58728 20.4844 8.4916 20.0593C8.39593 19.6343 8.667 19.2092 9.11348 19.1181C14.2002 18.0099 18.5693 18.4805 22.0773 20.5299C22.476 20.7576 22.6035 21.2434 22.3643 21.623ZM23.9908 18.1617C23.6878 18.6323 23.05 18.769 22.5557 18.4957C18.9679 16.3856 13.4985 15.7783 9.25699 17.008C8.6989 17.1598 8.12485 16.8714 7.96539 16.3552C7.80594 15.8239 8.1089 15.2774 8.667 15.1256C13.5145 13.7289 19.542 14.3969 23.6719 16.8106C24.1343 17.0839 24.2938 17.6911 23.9908 18.1617ZM24.1343 14.5487C19.829 12.1197 12.7332 11.892 8.61917 13.0761C7.96539 13.2735 7.26378 12.9243 7.05649 12.2867C6.8492 11.6643 7.23189 10.9964 7.88567 10.799C12.6056 9.43274 20.4509 9.70599 25.394 12.4993C25.984 12.8332 26.1754 13.5619 25.8246 14.1236C25.4897 14.7005 24.7243 14.8978 24.1343 14.5487Z" fill="white"/></svg>Listen on Spotify</a>
+      <a href="https://podcasts.apple.com/ua/podcast/forward-with-valeriya-ionan/id1893604117" target="_blank" rel="noopener"><svg viewBox="0 0 32 32" fill="none"><path d="M30 16C30 23.728 23.735 30 16 30C8.265 30 2 23.728 2 16C2 8.265 8.265 2 16 2C23.735 2 30 8.265 30 16Z" fill="#283544"/><path d="M22.5621 12.4574C22.4857 12.502 20.6671 13.4425 20.6671 15.5279C20.7528 17.9061 22.9621 18.7401 23 18.7401C22.9621 18.7847 22.6665 19.8763 21.7907 21.0205C21.0956 22.0062 20.3242 23 19.1528 23C18.0385 23 17.6385 22.3431 16.3528 22.3431C14.972 22.3431 14.5813 23 13.5242 23C12.3528 23 11.5242 21.953 10.7913 20.9766C9.8391 19.6986 9.02978 17.6931 9.00121 15.7675C8.98195 14.7471 9.19189 13.744 9.72481 12.8921C10.477 11.7026 11.8198 10.8952 13.2863 10.8686C14.4099 10.8333 15.4099 11.5875 16.0956 11.5875C16.7528 11.5875 17.9814 10.8686 19.3714 10.8686C19.9714 10.8692 21.5714 11.0376 22.5621 12.4574ZM16.0006 10.6649C15.8006 9.73303 16.3528 8.80119 16.8671 8.20677C17.5242 7.48792 18.5621 7 19.4571 7C19.5143 7.93185 19.1522 8.84575 18.505 9.51136C17.9242 10.2302 16.9242 10.7714 16.0006 10.6649Z" fill="white"/></svg>Listen on Apple Podcasts</a>
+    </div>
+
+    <div class="fwd-grid">
+      <article class="ep">
+        <div class="cover"><img loading="lazy" decoding="async" src="img/figma/8779f69f-3b8e-4938-bcf5-c6f11b9b4075.jpg" alt="" /></div>
+        <div class="body">
+          <h3>Why Smart Investors Go to Ukraine — and Most Still Don’t</h3>
+          <p class="desc">A conversation about how the world’s capital thinks about risk, how it misreads opportunity, and what it actually takes to commit to a market that is rewriting the rules in real time.</p>
+          <p class="guest"><b>Dave Morgan</b> | American entrepreneur and investor. Founder, Simulmedia.</p>
+          <div class="acts">
+            <a class="watch" href="https://youtu.be/-PLQ7US8Wbo" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m10 9 5 3-5 3z" fill="currentColor"/></svg>Watch the episode</a>
+            <a class="read" href="https://www.berlinglobaldialogue.org/resources/what-investors-miss-when-they-do-not-show-up" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h10M4 18h13"/></svg>Read my column</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="ep">
+        <div class="cover"><img loading="lazy" decoding="async" src="img/figma/5d7b736a-cbdc-44ac-a33e-3a66761f6641.jpg" alt="" /></div>
+        <div class="body">
+          <h3>Wild Freedom, Venture as Adventure and Why Ukraine Feels Like “The Real America”</h3>
+          <p class="desc">What the world gets wrong about risk, branding and the state — and where the next generation of bold ideas is actually coming from. Andriy thinks Kyiv today feels like New York in the late 1980s. He might be right.</p>
+          <p class="guest"><b>Andriy Fedoriv</b> | Founder and CEO, Fedoriv Group and Fedoriv Agency.</p>
+          <div class="acts">
+            <a class="watch" href="https://youtu.be/A-TLyX0RmV4" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m10 9 5 3-5 3z" fill="currentColor"/></svg>Watch the episode</a>
+            <a class="read" href="https://united24media.com/opinion/born-in-ice-water-how-ukraine-forges-the-entrepreneurs-modern-markets-forgot-18812" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h10M4 18h13"/></svg>Read my column</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="ep">
+        <div class="cover"><img loading="lazy" decoding="async" src="img/figma/2c530427-8414-4fd9-bde7-aff8e9b719f5.jpg" alt="" /></div>
+        <div class="body">
+          <h3>Building Ukraine’s First New City — Oksana Markarova on Nove Misto</h3>
+          <p class="desc">What it takes to build a country’s future while the war is still ongoing. Nove Misto — the first city in Ukraine designed from scratch: 100,000 residents, private funding, circular design and tech-first infrastructure.</p>
+          <p class="guest"><b>Oksana Markarova</b></p>
+          <div class="acts">
+            <a class="watch" href="https://youtu.be/E-ToHoXJJ08" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m10 9 5 3-5 3z" fill="currentColor"/></svg>Watch the episode</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="ep">
+        <div class="cover"><img loading="lazy" decoding="async" src="img/figma/098086a4-4d49-4832-bd58-55d53a31543f.jpg" alt="" /></div>
+        <div class="body">
+          <h3>What Is the Agentic State? How AI Will Transform Government with Luukas Ilves</h3>
+          <p class="desc">Why the shift to an agentic state is bigger than anything governments have done in twenty years — citizen agents across public services, task agents that transform procurement and fight corruption.</p>
+          <p class="guest"><b>Luukas Ilves</b> | Former CIO of Estonia. Advisor to Ukraine’s Minister of Digital Transformation.</p>
+          <div class="acts">
+            <a class="watch" href="https://youtu.be/kDEszTDg__0" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m10 9 5 3-5 3z" fill="currentColor"/></svg>Watch the episode</a>
+            <a class="read" href="https://www.friendsofeurope.org/insights/critical-thinking-the-agentic-state-why-europe-must-act-now/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h10M4 18h13"/></svg>Read my column</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="ep">
+        <div class="cover"><img loading="lazy" decoding="async" src="img/figma/b2b86890-1547-41c5-934a-313184de5fa8.jpg" alt="" /></div>
+        <div class="body">
+          <h3>Meet the Startup — RATEL: Inside Ukraine’s UGV Revolution</h3>
+          <p class="desc">Building one of Ukraine’s fastest-scaling defense companies in the middle of a war. How war accelerates innovation, why Ukrainian UGVs are up to ten times more cost-effective, and what partners need to know now.</p>
+          <p class="guest"><b>Taras Ostapchuk</b> | Founder, Ratel — one of Ukraine’s largest unmanned ground vehicle producers.</p>
+          <div class="acts">
+            <a class="watch" href="https://youtu.be/ql5_AET2FXo" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m10 9 5 3-5 3z" fill="currentColor"/></svg>Watch the episode</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="ep">
+        <div class="cover"><img loading="lazy" decoding="async" src="img/figma/efc22fdd-cef5-4b55-875b-d67baae0e686.jpg" alt="" /></div>
+        <div class="body">
+          <h3>Agentic State: How Ukraine Is Building AI Government First with Oleksandr Bornyakov</h3>
+          <p class="desc">What it actually takes to build an agentic state from inside a government that has already done more than most. Ukraine ranks fifth globally in digital public services — now moving toward AI agents that replace bureaucracy entirely.</p>
+          <p class="guest"><b>Oleksandr Bornyakov</b> | Acting Minister of Digital Transformation of Ukraine.</p>
+          <div class="acts">
+            <a class="watch" href="https://youtu.be/4IJgvBb0KLA" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m10 9 5 3-5 3z" fill="currentColor"/></svg>Watch the episode</a>
+            <a class="read" href="https://www.friendsofeurope.org/insights/critical-thinking-building-the-agentic-state-ukraines-model-in-practice/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h10M4 18h13"/></svg>Read my column</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div></section>
+
+  <!-- GOVERNMENT FREESTYLER (book) -->
+  <section class="book" id="book"><div class="wrap">
+    <div class="book-card">
+      <img loading="lazy" decoding="async" src="img/figma/1010cc21-cce4-4535-a6c8-86d0f2439388.jpg" alt="Government Freestyler — book" />
+      <div class="book-inner">
+        <h2>Government Freestyler</h2>
+        <div class="coming">coming in 2026</div>
+        <p>Six years of building one of the world’s most ambitious digital states from the inside left me with a kind of knowledge that doesn’t fit into conference talks or policy papers. At some point I realized the only honest container for it was a book.</p>
+        <p>The book is about Ukraine’s digital state — how we built it under the leadership of Mykhailo Fedorov, what it looks like to transform a government from the inside while the country is simultaneously running a pandemic response and then, without warning, a full-scale war, and what we learned that I believe no government in the world should have to learn the hard way.</p>
+        <a class="btn-dark" id="bookBtn" href="#book"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>Full Info</a>
+        <div class="self">Self-published. Coming soon in 2026.</div>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- GOVERNMENT FREESTYLER — full-info popup -->
+  <div class="bmodal" id="bookModal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Government Freestyler">
+    <div class="bmodal-card">
+      <button class="bmodal-x" type="button" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      <div class="bmodal-scroll" data-lenis-prevent>
+        <div class="bmodal-hero"><img src="img/figma/1010cc21-cce4-4535-a6c8-86d0f2439388.jpg" alt="Government Freestyler — book" /></div>
+        <div class="bmodal-body">
+          <div class="bm-eyebrow">Coming in 2026</div>
+          <h3 class="bm-title">Government Freestyler</h3>
+          <p>Six years of building one of the world&rsquo;s most ambitious digital states from the inside left me with a kind of knowledge that doesn&rsquo;t fit into conference talks or policy papers. At some point I realized the only honest container for it was a book.</p>
+          <p>The book is about Ukraine&rsquo;s digital state — how we built it under the leadership of <b>Mykhailo Fedorov</b>, what it looks like to transform a government from the inside while the country is simultaneously running a pandemic response and then, without warning, a full-scale war, and what we learned that I believe no government in the world should have to learn the hard way.</p>
+          <p>But underneath all of that, it is about one thing: what it means to be a <b>Government Freestyler</b>. I think I found a name for a kind of person who has always existed inside the machinery of government — but never had a category.</p>
+          <p>A Government Freestyler is not a rebel. Not someone who ignores the rules or burns the system down. They are someone who refuses to accept the rules as the outer boundary of what is possible — who doesn&rsquo;t wait for a mandate before taking responsibility, who doesn&rsquo;t ask <i>is this allowed</i>, but instead <i>what is blocking this</i>, and what would it take to remove it.</p>
+          <p>Three things set a Freestyler apart from everyone else inside the machine.</p>
+          <p>They live simultaneously in two worlds — <i>de jure</i>, where titles and procedures define what exists, and <i>de facto</i>, where the work either gets done or it doesn&rsquo;t. They have learned to speak the language of both without letting the first one kill the second.</p>
+          <p>They rewrite rules rather than circumvent them, because they understand that bureaucracy is essentially code — and code can be changed, if you know where to look and have the patience and political will to actually change it. (Thirty government regulations rewritten in the first months of full-scale war is not an exception to this. It is the proof of it.)</p>
+          <p>They stay when the moment is there, even when staying is hard, because they understand that the moment will not wait — and neither will the people who depend on what gets built inside it.</p>
+          <p>There is also a cost to all of this. The system does not love those who rewrite it, even when it accepts the results. The personal price of operating with that kind of freedom inside a structure that was not designed for it is something I write about honestly in the book — because it matters, and because almost no one talks about it.</p>
+          <p>If you work in government, advise governments, fund reform efforts, or have simply wondered why so many genuinely good ideas manage to die so completely inside the institutions that claim to want them — this book is for you.</p>
+          <div class="bm-self">Self-published. Coming soon in 2026.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHILOSOPHY — popup -->
+  <div class="bmodal" id="philoModal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Philosophy">
+    <div class="bmodal-card">
+      <button class="bmodal-x" type="button" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      <div class="bmodal-scroll" data-lenis-prevent>
+        <div class="bmodal-hero"><img src="img/hero.jpg" alt="Valeriya Ionan" style="object-position:62% 24%" /></div>
+        <div class="bmodal-body">
+          <div class="bm-eyebrow">Personal constitution</div>
+          <h3 class="bm-title">Philosophy</h3>
+
+          <div class="bm-sub">What I can do</div>
+          <p>I see what needs to be built. I lead the people who can build it. And I deliver at the scale of nations and the speed of startups. I have designed national-scale digital systems, launched ecosystems from zero and turned ambitious vision into working infrastructure. I move between worlds that were not designed to talk to each other: governments and founders, ministers and engineers, institutions and ecosystems and I make them fall in love with innovations and tech and produce something new together. I work where no playbook exists and I build the rules as the work demands. I call this <b>Government Freestyler</b> thinking.</p>
+
+          <div class="bm-sub">What I believe</div>
+          <p>I believe institutions can be transformed. Ukraine taught me that. I believe technology and innovation are the most powerful tools we have to redesign how societies work, learn and govern and that those who learn to wield them responsibly will shape the next century. I believe speed and trust are not opposites. I believe the future will not be defined by institutions or startups alone, but by unlikely coalitions willing to do what neither can do alone. I believe action is the only credible language of belief.</p>
+
+          <div class="bm-sub">My vision</div>
+          <p>A world where governments and businesses are co-creators of the future. Where technology and innovation expand human agency, not replace it. Where AI is the foundation of how societies learn, govern and raise their children. Where the systems we build today outlast us and serve generations we will never meet.</p>
+          <p>I build for that world. I invest in people building for that world. I write, speak and work to make that world inevitable.</p>
+
+          <div class="bm-creed">
+            <p>I believe our duty is to design systems that outlast us, not for today&rsquo;s problems, but for tomorrow&rsquo;s unknowns.</p>
+            <p>I am deeply Ukrainian and I operate as a citizen of the world.</p>
+            <p class="climax">I do not just build partnerships. I architect the ecosystems where governments and businesses become co-creators of the future.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHAT I'M BUILDING -->
+  <section class="build" id="building"><div class="wrap">
+    <div class="build-head">
+      <h2 class="sec-title">What I’m Building</h2>
+      <p class="intro">I co-build and back ideas designed to solve problems at the scale of systems, not just markets at the intersection of AI, GovTech, defense, education, and the future of how societies learn, govern, and decide.</p>
+    </div>
+    <div class="build-grid">
+      <article class="bcard">
+        <div class="pic"><img loading="lazy" decoding="async" src="img/figma/a3a3e644-ee64-4400-97f4-710c75fecdc3.jpg" alt="Pomplya & Friends" /></div>
+        <div class="in">
+          <h3>Pomplya &amp; Friends / Pompita y Amigos</h3>
+          <div class="row"><span>Pilot: Ukraine, 2026</span><span class="ln"></span><span>Next stage: Spain</span></div>
+          <p>My long bet on what childhood looks like in an AI-native world. An educational universe for children aged 3–5, introducing digital literacy, AI, online safety and emotional intelligence through stories, characters and interactive experiences. What began as a book is becoming a broader edutainment ecosystem.</p>
+          <a class="more" href="#building"><span class="ed"></span><span>More information</span></a>
+        </div>
+      </article>
+      <article class="bcard">
+        <div class="pic"><img loading="lazy" decoding="async" src="img/figma/7c208b4d-c427-44ad-b1db-73a2b7d5094e.jpg" alt="Selected investments & advisory" /></div>
+        <div class="in">
+          <h3>Selected investments &amp; advisory</h3>
+          <p style="margin-top:18px">I back founders building AI-native systems most institutions are not yet ready to imagine in GovTech, defense innovation, education and future-ready infrastructure.</p>
+          <p class="note">If you’re building at one of these intersections or want to partner, co-invest — let’s talk.</p>
+          <a class="more" href="mailto:hello@ionan.global"><span class="ed"></span><span>hello@ionan.global</span></a>
+        </div>
+      </article>
+    </div>
+  </div></section>
+
+  <!-- WRITING & MEDIA -->
+  <section class="media" id="media"><div class="wrap">
+    <div class="media-head">
+      <h2 class="sec-title">Writing &amp; Media</h2>
+      <a class="btn-dark" href="writing.html"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span>View All</a>
+    </div>
+    <div class="media-grid">
+      <a class="tile" href="writing.html"><div class="pic"><img loading="lazy" decoding="async" src="img/figma/3575f886-6b25-499b-be9e-b207986648be.jpg" alt="" /></div><div class="tag">Interview</div><h3>Vogue Leaders</h3></a>
+      <a class="tile" href="writing.html"><div class="pic"><img loading="lazy" decoding="async" src="img/figma/09fb1803-a1bc-4ef0-9063-bb8256e9b5d3.jpg" alt="" /></div><div class="tag">Podcast</div><h3>Ukraine’s digital story: Turning challenges into change</h3></a>
+      <a class="tile" href="writing.html"><div class="pic"><img loading="lazy" decoding="async" src="img/figma/89ff3862-0318-4873-979e-ab6879634724.jpg" alt="" /></div><div class="tag">Interview</div><h3>From Crisis to Digital Power</h3></a>
+      <a class="tile" href="writing.html"><div class="pic"><img loading="lazy" decoding="async" src="img/figma/56fc8b9c-290b-4408-833a-c9f8d11222f8.jpg" alt="" /></div><div class="tag">Podcast</div><h3>Valeriya Ionan on Ukraine’s Digital State Vision, Diia, &amp; Innovation During War | Technovation 1009</h3></a>
+      <a class="tile" href="writing.html"><div class="pic"><img loading="lazy" decoding="async" src="img/figma/036f76cd-70c3-4b18-84bc-a963500b9cda.jpg" alt="" /></div><div class="tag">Interview</div><h3>Delivering Digital Transformation in Ukraine</h3></a>
+      <a class="tile" href="writing.html"><div class="pic"><img loading="lazy" decoding="async" src="img/figma/c62ff3b7-c0d2-466e-8f7c-b79791e76d29.jpg" alt="" /></div><div class="tag">Podcast</div><h3>Inside Europe</h3></a>
+    </div>
+  </div></section>
+
+  <!-- SUBSTACK -->
+  <section class="substack" id="substack"><div class="wrap">
+    <div class="sub-card">
+      <img loading="lazy" decoding="async" class="bookmark" src="img/figma/9451e8da-0958-4a93-9845-9deca051ec23.png" alt="" />
+      <div class="col">
+        <h2>The New Era of Everything — Substack</h2>
+        <p class="lead">A space where I think out loud about the new era of digital states, AI, and the systems we are building for what comes next. Writing on frontier governance, agentic state, defense innovation, and the partnerships that will define the next decade. Notes from FORWARD episodes, dispatches from the field, and ideas that do not fit anywhere else.</p>
+        <div style="display:flex;flex-direction:column;align-items:flex-start;margin-bottom:14px">
+          <a class="sub-pill" href="https://valeriyaionan.substack.com/p/no-safe-place-future" target="_blank" rel="noopener"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span><span>No Safe Place Future</span></a>
+          <a class="sub-pill" href="https://valeriyaionan.substack.com/p/my-day-in-2140-when-i-turned-150" target="_blank" rel="noopener"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span><span>My Day in 2140: When I Turned 150 in Cherkasy Shores</span></a>
+          <a class="sub-pill" href="https://valeriyaionan.substack.com/p/the-new-era-of-everything" target="_blank" rel="noopener"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span><span>The New Era of Everything</span></a>
+        </div>
+        <a class="sub-read" href="https://substack.com/@valeriyaionan" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>Read on Substack</a>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- LET'S TALK (footer) -->
+  <footer class="lets" id="contact-footer"><div class="wrap">
+    <div class="lets-card">
+      <div class="lets-top">
+        <h2>Let’s work together</h2>
+        <a class="email" href="mailto:hello@ionan.global">hello@ionan.global</a>
+      </div>
+      <div class="lets-bottom">
+        <nav class="lets-nav"><a href="bio.html">Bio</a><a href="#work">Work</a><a href="#forward">Forward</a><a href="writing.html">Writing &amp; Media</a></nav>
+        <div class="lets-social">
+          <a href="https://youtube.com/@forwardwithvaleriya" target="_blank" rel="noopener">YouTube</a>
+          <a href="https://substack.com/@valeriyaionan" target="_blank" rel="noopener">Substack</a>
+          <a href="https://www.instagram.com/valeriya_ionan/" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://www.linkedin.com/in/valeriyaionan/" target="_blank" rel="noopener">Linkedin</a>
+        </div>
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- FULLSCREEN MENU -->
+  <div class="m-overlay" id="menu-overlay" aria-hidden="true" role="dialog" aria-label="Menu">
+    <div class="m-head">
+      <span class="m-logo">Valeriya Ionan</span>
+      <button class="m-close" type="button" aria-label="Close menu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"><path d="M5 5l14 14M19 5 5 19"/></svg>Close</button>
+    </div>
+    <div class="m-main">
+            <nav class="m-nav">
+        <a class="m-link" href="bio.html" style="--i:0"><span class="m-mask"><span class="m-rise"><span class="m-ladder"><span class="m-txt">Bio</span><span class="m-txt">Bio</span></span></span></span></a>
+        <a class="m-link" href="cases.html" style="--i:1"><span class="m-mask"><span class="m-rise"><span class="m-ladder"><span class="m-txt">Cases</span><span class="m-txt">Cases</span></span></span></span></a>
+        <a class="m-link" href="#work" style="--i:2"><span class="m-mask"><span class="m-rise"><span class="m-ladder"><span class="m-txt">Who I Work With</span><span class="m-txt">Who I Work With</span></span></span></span></a>
+        <a class="m-link" href="#services" style="--i:3"><span class="m-mask"><span class="m-rise"><span class="m-ladder"><span class="m-txt">Work With Me</span><span class="m-txt">Work With Me</span></span></span></span></a>
+        <a class="m-link" href="#forward" style="--i:4"><span class="m-mask"><span class="m-rise"><span class="m-ladder"><span class="m-txt">Forward</span><span class="m-txt">Forward</span></span></span></span></a>
+        <a class="m-link" href="#book" style="--i:5"><span class="m-mask"><span class="m-rise"><span class="m-ladder"><span class="m-txt">Gov Freestyler</span><span class="m-txt">Gov Freestyler</span></span></span></span></a>
+        <a class="m-link" href="writing.html" style="--i:6"><span class="m-mask"><span class="m-rise"><span class="m-ladder"><span class="m-txt">Writing &amp; Media</span><span class="m-txt">Writing &amp; Media</span></span></span></span></a>
+        <a class="m-link" href="#building" style="--i:7"><span class="m-mask"><span class="m-rise"><span class="m-ladder"><span class="m-txt">What I'm Building</span><span class="m-txt">What I'm Building</span></span></span></span></a>
+        <a class="m-link" href="contacts.html" style="--i:9"><span class="m-mask"><span class="m-rise"><span class="m-ladder"><span class="m-txt">Contacts</span><span class="m-txt">Contacts</span></span></span></span></a>
+      </nav>
+      <div class="m-side">
+        <div class="m-group" style="--i:10">
+          <span class="m-label">Follow</span>
+          <a class="m-slink" href="https://www.linkedin.com/in/valeriyaionan/" target="_blank" rel="noopener"><span class="tx">LinkedIn</span><span class="ar"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
+          <a class="m-slink" href="https://www.instagram.com/valeriya_ionan/" target="_blank" rel="noopener"><span class="tx">Instagram</span><span class="ar"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
+          <a class="m-slink" href="https://youtube.com/@forwardwithvaleriya" target="_blank" rel="noopener"><span class="tx">YouTube</span><span class="ar"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
+          <a class="m-slink" href="https://substack.com/@valeriyaionan" target="_blank" rel="noopener"><span class="tx">Substack</span><span class="ar"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
+        </div>
+        <div class="m-group" style="--i:11">
+          <span class="m-label">From Substack</span>
+          <a class="m-slink" href="https://valeriyaionan.substack.com/p/no-safe-place-future" target="_blank" rel="noopener"><span class="tx">No Safe Place Future</span><span class="ar"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
+          <a class="m-slink" href="https://valeriyaionan.substack.com/p/my-day-in-2140-when-i-turned-150" target="_blank" rel="noopener"><span class="tx">My Day in 2140: When I Turned 150</span><span class="ar"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
+          <a class="m-slink" href="https://valeriyaionan.substack.com/p/the-new-era-of-everything" target="_blank" rel="noopener"><span class="tx">The New Era of Everything</span><span class="ar"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
+          <a class="m-slink" href="https://substack.com/@valeriyaionan" target="_blank" rel="noopener"><span class="tx">Read all on Substack</span><span class="ar"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
+        </div>
+      </div>
+    </div>
+    <div class="m-foot">
+      <a class="m-email" href="mailto:hello@ionan.global" style="--i:13">hello@ionan.global</a>
+      <div class="m-meta" style="--i:14">Government &amp; business innovator<br>Available for select partnerships · 2026</div>
+    </div>
+  </div>
+
+<script>
+  const io=new IntersectionObserver((es)=>{es.forEach((e)=>{if(e.isIntersecting){const el=e.target;const i=[...el.parentNode.children].indexOf(el);el.style.transitionDelay=(i*90)+"ms";el.classList.add("in");io.unobserve(el);}});},{threshold:.2});
+  document.querySelectorAll(".card").forEach((c)=>io.observe(c));
+
+  /* ---- WHO I WORK WITH: pinned scroll-sequencer ---- */
+  (function(){
+    const track=document.querySelector(".who-track");if(!track)return;
+    const imgs=document.querySelectorAll(".who-bg img");
+    const blocks=document.querySelectorAll(".who-block");
+    const btns=document.querySelectorAll(".who-index button");
+    const counter=document.querySelector(".who-head .c");
+    const STEPS=3;let cur=-1,ticking=false;
+    const mqWho=window.matchMedia("(max-width:860px)");   /* mobile: tap-to-switch, no scroll-driven steps */
+    function apply(s){
+      if(s===cur)return;cur=s;
+      imgs.forEach(el=>el.classList.toggle("on",+el.dataset.step===s));
+      blocks.forEach(el=>el.classList.toggle("on",+el.dataset.step===s));
+      btns.forEach(el=>el.classList.toggle("on",+el.dataset.go===s));
+      if(counter)counter.textContent="0"+(s+1)+" / 0"+STEPS;
+    }
+    function onScroll(){
+      if(mqWho.matches){return;}   /* mobile: changing a block re-flows height -> scroll math jumps & skips steps; switch via index taps instead */
+      const total=track.offsetHeight-window.innerHeight;
+      if(total<=0){return;}
+      let p=(-track.getBoundingClientRect().top)/total;
+      p=Math.max(0,Math.min(0.9999,p));
+      apply(Math.min(STEPS-1,Math.floor(p*STEPS)));
+    }
+    function loop(){onScroll();ticking=false;}
+    window.addEventListener("scroll",()=>{if(!ticking){ticking=true;requestAnimationFrame(loop);}},{passive:true});
+    window.addEventListener("resize",onScroll);
+    btns.forEach(b=>b.addEventListener("click",()=>{
+      const s=+b.dataset.go;
+      const total=track.offsetHeight-window.innerHeight;
+      if(mqWho.matches||total<=0){apply(s);return;}   /* mobile: just switch the block */
+      const top=track.getBoundingClientRect().top+window.scrollY;
+      window.scrollTo({top:top+((s+0.5)/STEPS)*total,behavior:"smooth"});
+    }));
+    apply(0);onScroll();
+  })();
+
+  /* ---- HOW TO WORK WITH ME: pinned horizontal scroll ---- */
+  (function(){
+    const track=document.querySelector(".work-track");if(!track)return;
+    const rail=document.querySelector(".work-rail");
+    const vp=document.querySelector(".work-viewport");
+    const fill=document.querySelector(".work-progress span");
+    const mq=window.matchMedia("(max-width:860px)");
+    let travel=0,ticking=false;
+    function measure(){
+      if(mq.matches){track.style.height="";rail.style.transform="";if(fill)fill.style.width="";travel=0;return;}
+      travel=Math.max(0,rail.scrollWidth-vp.clientWidth);
+      track.style.height=(window.innerHeight+travel*1.15)+"px";
+    }
+    function onScroll(){
+      if(mq.matches)return;
+      const total=track.offsetHeight-window.innerHeight;
+      if(total<=0)return;
+      let p=(-track.getBoundingClientRect().top)/total;
+      p=Math.max(0,Math.min(1,p));
+      rail.style.transform="translate3d("+(-travel*p)+"px,0,0)";
+      if(fill)fill.style.width=(p*100)+"%";
+    }
+    function loop(){onScroll();ticking=false;}
+    window.addEventListener("scroll",()=>{if(!ticking){ticking=true;requestAnimationFrame(loop);}},{passive:true});
+    window.addEventListener("resize",()=>{measure();onScroll();});
+    measure();onScroll();
+  })();
+
+  /* ---- Lenis smooth scroll (matteofabbiani-style) ---- */
+  if(window.Lenis && !matchMedia("(prefers-reduced-motion: reduce)").matches){
+    const lenis=new Lenis({lerp:0.1,smoothWheel:true});window.__lenis=lenis;
+    function raf(t){lenis.raf(t);requestAnimationFrame(raf);}
+    requestAnimationFrame(raf);
+  }
+
+  /* ---- full-info popups (book + philosophy) ---- */
+  (function(){
+    function setup(btnId, modalId){
+      const modal=document.getElementById(modalId); if(!modal)return;
+      const btn=document.getElementById(btnId);
+      const closeBtn=modal.querySelector('.bmodal-x');
+      function open(){ modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); document.body.classList.add('bmodal-open'); if(window.__lenis)window.__lenis.stop(); const sc=modal.querySelector('.bmodal-scroll'); if(sc)sc.scrollTop=0; }
+      function close(){ modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); document.body.classList.remove('bmodal-open'); if(window.__lenis)window.__lenis.start(); }
+      if(btn) btn.addEventListener('click',function(e){ e.preventDefault(); open(); });
+      if(closeBtn) closeBtn.addEventListener('click',close);
+      modal.addEventListener('click',function(e){ if(e.target===modal) close(); });
+      document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&modal.classList.contains('open')) close(); });
+    }
+    setup('bookBtn','bookModal');
+    setup('philoBtn','philoModal');
+  })();
+
+  /* ---- Scroll-reveal with stagger ---- */
+  (function(){
+    const sel=".meet-left>*,.bio-lead,.bio-sub,.sec-tag,.work-head>*,.contact .eyebrow,.contact h2,.contact .reassure,.contact .row,.fwd-card,.ep,.sec-title,.build-head .intro,.bcard,.tile,.book-inner h2,.book-inner .coming,.book-inner p,.sub-card h2,.sub-card .lead,.sub-pill,.lets-top>*,.lets-bottom";
+    const els=[...document.querySelectorAll(sel)].filter(el=>!el.closest(".who"));
+    els.forEach(el=>el.classList.add("reveal"));
+    const ro=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){
+      const el=e.target,sibs=[...el.parentNode.children].filter(c=>c.classList.contains("reveal"));
+      el.style.transitionDelay=(Math.max(0,sibs.indexOf(el))*80)+"ms";el.classList.add("in");ro.unobserve(el);}});},
+      {threshold:.12,rootMargin:"0px 0px -8% 0px"});
+    els.forEach(el=>ro.observe(el));
+  })();
+
+  /* ---- preloader + cinematic hero intro (compositor CSS) ---- */
+  (function(){
+    const pl=document.getElementById("preloader");
+    const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+    document.body.classList.add("preloading");
+
+    /* split hero headline into masked words, then arm the intro */
+    if(!reduce){
+      const h1=document.querySelector(".hero-top h1");
+      if(h1 && !h1.classList.contains("split")){
+        const ws=h1.textContent.trim().split(/\s+/);
+        h1.textContent="";h1.classList.add("split");
+        ws.forEach((w,i)=>{
+          const m=document.createElement("span");m.className="wmask";
+          const r=document.createElement("span");r.className="wrise";
+          r.style.setProperty("--wi",i);r.textContent=w;
+          m.appendChild(r);h1.appendChild(m);
+          if(i<ws.length-1)h1.appendChild(document.createTextNode(" "));
+        });
+      }
+      document.documentElement.classList.add("js-intro");
+    }
+
+    function reveal(){
+      document.body.classList.remove("preloading");
+      document.body.classList.add("hero-in");   // triggers compositor CSS intro
+      if(window.__lenis)window.__lenis.start();
+    }
+
+    if(!pl||reduce){ if(pl)pl.remove(); reveal(); return; }
+    if(window.__lenis)window.__lenis.stop();
+
+    requestAnimationFrame(()=>requestAnimationFrame(()=>pl.classList.add("in")));
+
+    const fill=pl.querySelector(".pl-bar i");
+    const startT=performance.now();
+    let prog=0,target=0,ended=false;
+    (function paint(){
+      prog+=(target-prog)*0.09;
+      if(fill)fill.style.transform="scaleX("+Math.min(prog,1).toFixed(4)+")";
+      if(!ended)requestAnimationFrame(paint);
+    })();
+    const ramp=setInterval(()=>{target=Math.min(target+0.05,0.92);},90);
+
+    function exit(){
+      if(ended)return;ended=true;
+      clearInterval(ramp);
+      if(fill)fill.style.transform="scaleX(1)";
+      pl.classList.add("leaving");
+      setTimeout(()=>{pl.classList.add("done");reveal();},300);
+      setTimeout(()=>{pl.remove();},300+1000);
+    }
+    function ready(){
+      const wait=Math.max(0,1700-(performance.now()-startT)); // min on-screen time
+      setTimeout(exit,wait);
+    }
+    if(document.readyState==="complete")ready();
+    else window.addEventListener("load",ready,{once:true});
+    setTimeout(()=>{if(!ended)exit();},4500);             // hard safety cap
+  })();
+
+  /* ---- custom cursor: lerped follow + grow-on-hover (matteofabbiani-style) ---- */
+  (function(){
+    if(!matchMedia("(hover:hover) and (pointer:fine)").matches)return;
+    document.documentElement.classList.add("has-cursor");
+    const cur=document.createElement("div");cur.className="cursor hidden";document.body.appendChild(cur);
+    document.querySelectorAll(".hero-card,.who-stage,.fwd-card,.fwd-platforms,.ep,.sub-card,.lets-card,.wcard-contact").forEach(e=>e.dataset.lum="0.08");
+    function avgLum(img){try{const c=document.createElement("canvas");c.width=12;c.height=12;const x=c.getContext("2d");x.drawImage(img,0,0,12,12);const d=x.getImageData(0,0,12,12).data;let s=0,n=0;for(let i=0;i<d.length;i+=4){if(d[i+3]<40)continue;s+=0.2126*d[i]+0.7152*d[i+1]+0.0722*d[i+2];n++;}return n?(s/n)/255:null;}catch(e){return null;}}
+    function setLum(img){const v=avgLum(img);if(v!=null)img.dataset.lum=v.toFixed(3);}
+    document.querySelectorAll("img").forEach(img=>{if(img.complete&&img.naturalWidth)setLum(img);else img.addEventListener("load",()=>setLum(img),{once:true});});
+    function rgbLum(s){const m=s.match(/[\d.]+/g);if(!m||m.length<3)return null;if(m.length>=4&&parseFloat(m[3])<0.35)return null;return (0.2126*+m[0]+0.7152*+m[1]+0.0722*+m[2])/255;}
+    function lumAt(x,y){let node=document.elementFromPoint(x,y);while(node&&node.dataset){if(node.tagName==="IMG"&&node.dataset.lum==null&&node.complete&&node.naturalWidth)setLum(node);if(node.dataset.lum!=null)return parseFloat(node.dataset.lum);const bl=rgbLum(getComputedStyle(node).backgroundColor);if(bl!=null)return bl;node=node.parentElement;}return 1;}
+    function ctxLum(el){let node=el.parentElement;while(node&&node.dataset){if(node.dataset.lum!=null)return parseFloat(node.dataset.lum);const bl=rgbLum(getComputedStyle(node).backgroundColor);if(bl!=null)return bl;node=node.parentElement;}return 1;}
+    function setInv(x,y){cur.classList.toggle("inv",lumAt(x,y)<0.55);}
+    let mx=innerWidth/2,my=innerHeight/2,cx=mx,cy=my,seen=false,morphEl=null;
+    addEventListener("mousemove",e=>{mx=e.clientX;my=e.clientY;if(!seen){seen=true;cx=mx;cy=my;cur.classList.remove("hidden");}
+      if(!morphEl)setInv(mx,my);},{passive:true});
+    addEventListener("mouseleave",()=>cur.classList.add("hidden"));
+    (function tick(){
+      let tx=mx,ty=my;
+      if(morphEl){const r=morphEl.getBoundingClientRect();tx=r.left+r.width/2;ty=r.top+r.height/2;
+        cur.style.width=(r.width+14)+"px";cur.style.height=(r.height+14)+"px";}
+      cx+=(tx-cx)*0.22;cy+=(ty-cy)*0.22;
+      cur.style.transform="translate("+cx+"px,"+cy+"px) translate(-50%,-50%)";
+      requestAnimationFrame(tick);
+    })();
+    const hot=".ctile,.bcard,nav .mail,.btn-dark,.who-index button,.who-mail,.wcard-contact .email,.wcard-contact .cases,.fwd-card .guest-cta,.fwd-platforms a,.ep .acts a,.sub-pill,.sub-read,.lets-nav a,.lets-social a,.lets-card .email,.m-close,.m-slink,.m-sublink,[data-go]";
+    document.querySelectorAll(hot).forEach(el=>{
+      el.addEventListener("mouseenter",()=>{morphEl=el;cur.classList.add("morph");
+        const br=parseFloat(getComputedStyle(el).borderRadius)||8;
+        cur.style.borderRadius=Math.min(br+7,40)+"px";cur.classList.toggle("inv",ctxLum(el)<0.55);});
+      el.addEventListener("mouseleave",()=>{morphEl=null;cur.classList.remove("morph");cur.style.width="";cur.style.height="";cur.style.borderRadius="";});
+    });
+  })();
+
+  /* ---- nav magnetic sliding highlight (matteofabbiani-style) ---- */
+  (function(){
+    const links=document.querySelector("nav .links");if(!links)return;
+    const hl=document.createElement("span");hl.className="nav-hl";links.appendChild(hl);
+    links.querySelectorAll("a").forEach(a=>{
+      a.addEventListener("mouseenter",()=>{hl.style.opacity="1";hl.style.width=a.offsetWidth+"px";hl.style.height=a.offsetHeight+"px";hl.style.transform="translate("+a.offsetLeft+"px,"+a.offsetTop+"px)";});
+    });
+    links.addEventListener("mouseleave",()=>{hl.style.opacity="0";});
+  })();
+
+  /* ---- magnetic buttons ---- */
+  (function(){
+    if(!matchMedia("(hover:hover) and (pointer:fine)").matches)return;
+    document.querySelectorAll(".btn-dark,.menu,.sub-read,.guest-cta,.wcard-contact .cases").forEach(btn=>{
+      btn.style.willChange="transform";
+      btn.addEventListener("mousemove",e=>{const r=btn.getBoundingClientRect();const x=(e.clientX-r.left-r.width/2)*0.25;const y=(e.clientY-r.top-r.height/2)*0.25;btn.style.transform="translate("+x+"px,"+y+"px)";});
+      btn.addEventListener("mouseleave",()=>{btn.style.transform="";});
+    });
+  })();
+
+  /* ---- fullscreen menu ---- */
+  (function(){
+    const ov=document.getElementById("menu-overlay");
+    const openBtn=document.querySelector("nav .menu");
+    if(!ov||!openBtn)return;
+    const closeBtn=ov.querySelector(".m-close");
+    let open=false;
+    function setOpen(v){
+      open=v;
+      ov.classList.toggle("open",v);
+      ov.setAttribute("aria-hidden",v?"false":"true");
+      document.body.classList.toggle("menu-open",v);
+      if(window.__lenis){v?window.__lenis.stop():window.__lenis.start();}
+    }
+    openBtn.addEventListener("click",()=>setOpen(true));
+    if(closeBtn)closeBtn.addEventListener("click",()=>setOpen(false));
+    document.addEventListener("keydown",e=>{if(e.key==="Escape"&&open)setOpen(false);});
+    // Every link just closes the menu; in-page "#" links scroll natively
+    // (browser hash nav + scroll-behavior:smooth + scroll-margin-top), which is
+    // reliable here since Lenis is desynced and the page scrolls natively.
+    ov.querySelectorAll("a").forEach(a=>{a.addEventListener("click",()=>setOpen(false));});
+  })();
+</script>
+</body>
+</html>

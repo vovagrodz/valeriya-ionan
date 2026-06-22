@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Writing & Media — Valeriya Ionan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,500;0,600;0,700;1,500&display=swap" rel="stylesheet" />
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<style>
+  /* ============ DESIGN TOKENS (Figma «Valeria-Landing») ============ */
+  :root{
+    --ink:#101319;          /* primary text                    */
+    --bar:#000000;          /* black bars / buttons            */
+    --chip:#1c1c1c;         /* nav pill                        */
+    --paper:#f9f9f9;        /* page background                 */
+    --soft:#f3f3f3;         /* soft pill surface               */
+    --muted:#454545;        /* secondary body text             */
+    --muted-2:#9a9a9f;      /* tertiary / index numbers        */
+    --line:#e3e2df;         /* hairlines                       */
+    --slate:#5b626c;        /* design-system card slate        */
+    --near:#070909;         /* design-system card near-black   */
+    --on-dark:#ffffff;
+    --r-lg:20px;--r-md:14px;--r-sm:8px;
+    --maxw:1440px;--pad:20px;
+    --ease:cubic-bezier(.22,1,.36,1);
+    --ease-menu:cubic-bezier(.76,0,.24,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  section[id],footer[id]{scroll-margin-top:88px}
+  body{
+    font-family:"Inter Tight",system-ui,sans-serif;
+    background:var(--paper);color:var(--ink);
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    letter-spacing:-.011em;overflow-x:hidden;
+  }
+  img{display:block;max-width:100%}
+  a{color:inherit}
+  .wrap{width:100%;max-width:none;margin:0;padding:0 20px}
+  .sec-title{font-weight:500;font-size:clamp(34px,3.6vw,50px);line-height:1;letter-spacing:-.02em;color:var(--ink)}
+
+  /* ============ NAVBAR ============ */
+  nav.bar{position:sticky;top:0;z-index:60;padding-top:20px;background:linear-gradient(var(--paper) 60%,transparent)}
+  nav.bar .inner{display:flex;align-items:center;gap:16px;background:var(--bar);border-radius:var(--r-sm);height:54px;padding:0 5px 0 20px;color:#fff}
+  nav .logo{font-weight:500;font-size:24px;letter-spacing:-.48px}
+  nav .logo a{text-decoration:none}
+  nav .links{display:flex;gap:8px;margin:0 auto;position:relative}
+  nav .links a{position:relative;z-index:2;color:#fff;text-decoration:none;font-weight:500;font-size:16px;background:var(--chip);padding:10px 15px;border-radius:6px;letter-spacing:-.02em;transition:color .3s var(--ease)}
+  nav .links a:hover{color:#fff}
+  nav .nav-hl{position:absolute;left:0;top:0;border-radius:6px;background:rgba(255,255,255,.15);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);transition:transform .42s var(--ease),width .42s var(--ease),height .42s var(--ease),opacity .3s var(--ease);pointer-events:none;z-index:3;opacity:0}
+  nav .mail{color:#fff;font-size:16px;font-weight:500;text-decoration:none;transition:color .3s var(--ease)}
+  nav .mail:hover{color:#fff}
+  nav .menu{display:flex;align-items:center;gap:10px;background:#fff;color:#000;font-weight:500;font-size:16px;padding:10px 15px;border-radius:5px;cursor:pointer;transition:background .3s var(--ease),color .3s var(--ease)}
+  nav .menu svg{stroke:currentColor}
+  nav .menu:hover{background:#2c2c2c;color:#fff}
+  @media(max-width:900px){nav .links,nav .mail{display:none}}
+
+  /* ============ FEED (filterable index, modelled on the old /feed) ============ */
+  .fhero{padding-top:clamp(40px,5vw,64px);text-align:center;margin-bottom:clamp(30px,3.4vw,48px)}
+  .feyebrow{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:500;letter-spacing:-.005em;color:var(--muted-2);margin-bottom:22px}
+  .feyebrow a{text-decoration:none;color:var(--muted-2);transition:color .3s var(--ease)}
+  .feyebrow a:hover{color:var(--ink)}
+  .feyebrow .fdot{width:5px;height:5px;border-radius:50%;background:var(--muted-2)}
+  .feyebrow .fcur{color:var(--ink);text-transform:uppercase;letter-spacing:.14em;font-weight:600;font-size:12px}
+  .fhero h1{font-weight:500;font-size:clamp(40px,5vw,72px);line-height:1.02;letter-spacing:-.02em;color:#000;margin-bottom:22px}
+  .fhero-lead{font-weight:500;font-size:clamp(16px,1.35vw,19px);line-height:1.45;letter-spacing:-.012em;color:var(--muted);max-width:56ch;margin:0 auto}
+
+  .ftabs{display:flex;flex-wrap:wrap;justify-content:center;gap:clamp(16px,2.6vw,40px);margin-top:clamp(30px,3.4vw,44px)}
+  .ftab{background:none;border:0;font-family:inherit;cursor:pointer;font-size:clamp(18px,1.9vw,24px);font-weight:500;letter-spacing:-.015em;color:var(--muted-2);padding:4px 0;transition:color .3s var(--ease)}
+  .ftab:hover{color:var(--ink)}
+  .ftab.active{color:var(--ink)}
+
+  .fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(30px,3vw,48px) clamp(22px,2.2vw,30px);padding-bottom:clamp(24px,3vw,44px)}
+  .fcard{text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:18px;min-width:0}
+  .fcover{position:relative;aspect-ratio:1/1;border-radius:24px;overflow:hidden;background:#0c0e12;isolation:isolate}
+  .fcover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:scale(1.015);transition:transform 1.1s var(--ease)}
+  .fcard:hover .fcover img{transform:scale(1.055)}
+  .fmark{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;
+    font-weight:500;font-size:clamp(21px,1.9vw,29px);line-height:1.12;letter-spacing:-.02em;color:#fff;background:var(--near)}
+  .fmeta{display:flex;flex-direction:column;gap:5px;padding:0 2px}
+  .fcat{font-size:12px;font-weight:700;letter-spacing:normal;text-transform:none;color:rgba(30,30,30,.4)}
+  .ftitle{font-size:22px;font-weight:600;line-height:1.4;letter-spacing:normal;color:var(--ink);
+    transition:opacity .35s var(--ease)}
+  .fcard:hover .ftitle{opacity:.6}
+  .fcard[hidden]{display:none}
+  @media(max-width:900px){.fgrid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.fgrid{grid-template-columns:1fr;gap:26px}}
+
+  /* ============ CLOSING ============ */
+  .wclose{padding:clamp(56px,6vw,90px) 0 0;border-top:1px solid var(--line);margin-top:clamp(40px,5vw,72px)}
+  .wclose-row{display:flex;align-items:center;justify-content:space-between;gap:28px;flex-wrap:wrap}
+  .wclose-lead{font-weight:500;font-size:clamp(18px,1.5vw,22px);line-height:1.3;letter-spacing:-.018em;color:var(--ink);max-width:30ch}
+  .wclose-acts{display:flex;align-items:center;gap:28px;flex-wrap:wrap}
+  .glass-mail{position:relative;display:inline-flex;align-items:center;gap:10px;padding:13px 18px;border-radius:8px;color:#fff;font-weight:500;font-size:16px;letter-spacing:-.02em;text-decoration:none;background:#070909;border:1px solid rgba(0,0,0,.14);transition:background .3s var(--ease),transform .4s var(--ease)}
+  .glass-mail:hover{background:#161618}
+  .glass-mail svg{width:24px;height:24px;flex:none}
+  .wclose-bio{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);font-size:18px;font-weight:500;letter-spacing:-.01em}
+  .wclose-bio .lab{background-image:linear-gradient(var(--ink),var(--ink));background-position:0 100%;background-size:0% 1.5px;background-repeat:no-repeat;padding-bottom:3px;transition:background-size .4s var(--ease)}
+  .wclose-bio:hover .lab{background-size:100% 1.5px}
+  .wclose-bio svg{stroke:currentColor;flex:none;transition:transform .35s var(--ease)}
+  .wclose-bio:hover svg{transform:translate(3px,-3px)}
+  @media(max-width:640px){.fhero h1{font-size:clamp(34px,9vw,48px)}}
+
+  /* ============ LET'S TALK (footer) ============ */
+  .lets{padding:120px 0 40px}
+  .lets-card{position:relative;background:#070909;border-radius:var(--r-lg);min-height:435px;padding:60px 80px;color:#fff;display:flex;flex-direction:column}
+  .lets-top{display:flex;justify-content:space-between;align-items:flex-start;gap:40px;flex-wrap:wrap}
+  .lets-card h2{font-size:clamp(40px,5.4vw,70px);font-weight:500;line-height:1;letter-spacing:-.02em}
+  .lets-card .email{overflow-wrap:anywhere;font-size:clamp(28px,4.4vw,60px);font-weight:500;letter-spacing:-.02em;color:#fff;text-decoration:none;transition:opacity .3s var(--ease)}
+  .lets-card .email:hover{opacity:.7}
+  .lets-bottom{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;gap:30px;flex-wrap:wrap;padding-top:50px}
+  .lets-nav{display:flex;flex-wrap:wrap;gap:30px}
+  .lets-nav a{font-size:clamp(16px,1.7vw,24px);font-weight:500;letter-spacing:-.02em;color:rgba(255,255,255,.4);text-decoration:none;transition:color .3s var(--ease)}
+  .lets-social{display:flex;gap:40px}
+  .lets-social a{font-size:clamp(20px,2.6vw,36px);font-weight:500;letter-spacing:-.02em;color:rgba(255,255,255,.4);text-decoration:none;transition:color .3s var(--ease)}
+  .lets-nav a:hover,.lets-social a:hover{color:#fff}
+  @media(max-width:820px){.lets-card{padding:40px 26px}.lets-top{flex-direction:column;gap:14px}}
+
+  footer{padding:0 0 60px;color:var(--muted-2);font-size:13px}
+
+  /* ============ MOTION ============ */
+  html.lenis,html.lenis body{height:auto}
+  .lenis.lenis-smooth{scroll-behavior:auto !important}
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .85s var(--ease),transform .85s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+  @media(prefers-reduced-motion:reduce){.reveal{opacity:1 !important;transform:none !important;transition:none}}
+
+  .has-cursor,.has-cursor *{cursor:none !important}
+  .cursor{position:fixed;top:0;left:0;width:16px;height:16px;border-radius:50%;
+    background:#101319;border:0 solid #101319;
+    pointer-events:none;z-index:9999;transform:translate(-50%,-50%);will-change:transform,width,height,border-radius;
+    transition:width .35s var(--ease),height .35s var(--ease),border-radius .35s var(--ease),border-width .2s var(--ease),background-color .2s var(--ease),border-color .25s var(--ease),opacity .25s var(--ease)}
+  .cursor.inv{background:#fff;border-color:#fff}
+  .cursor.morph{background:transparent;border-width:1.5px}
+  .cursor.hidden{opacity:0}
+  .btn-dark,nav .menu,.glass-mail,.wclose-bio{transition:background-color .35s var(--ease),color .35s var(--ease),border-color .35s var(--ease),transform .4s var(--ease)}
+
+  /* ============ FULLSCREEN MENU ============ */
+  body.menu-open{overflow:hidden}
+  .m-overlay{position:fixed;inset:0;z-index:200;background:#070909;color:#fff;
+    display:flex;flex-direction:column;padding:20px 20px 22px;
+    transform:translateY(-100%);visibility:hidden;will-change:transform;
+    transition:transform .85s var(--ease-menu),visibility 0s linear .85s}
+  .m-overlay.open{transform:translateY(0);visibility:visible;
+    transition:transform .85s var(--ease-menu)}
+  .m-head{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;height:54px}
+  .m-logo{font-weight:500;font-size:24px;letter-spacing:-.48px;color:#fff}
+  .m-close{display:inline-flex;align-items:center;gap:10px;background:#fff;color:#000;
+    font-family:inherit;font-weight:500;font-size:16px;letter-spacing:-.02em;
+    padding:10px 15px;border:0;border-radius:5px;cursor:pointer;
+    transition:background-color .35s var(--ease),color .35s var(--ease),transform .4s var(--ease)}
+  .m-close:hover{background:#2c2c2c;color:#fff}
+  .m-close svg{stroke:currentColor}
+  .m-main{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:1.5fr .9fr;gap:48px;
+    align-content:safe center;padding:20px 0;overflow:auto;scrollbar-width:none}
+  .m-main::-webkit-scrollbar{display:none}
+  .m-nav{display:flex;flex-direction:column;align-items:flex-start}
+  .m-link{display:inline-flex;align-items:center;gap:18px;text-decoration:none;color:#fff;
+    font-weight:500;font-size:clamp(22px,2.4vw,36px);line-height:1.2;letter-spacing:-.022em;
+    padding:2px 0;max-width:100%}
+  .m-mask{display:block;overflow:hidden;height:1.2em}
+  .m-rise{display:block;transform:translateY(118%);will-change:transform;
+    transition:transform .85s var(--ease)}
+  .m-overlay.open .m-rise{transform:translateY(0);transition-delay:calc(.12s + var(--i,0)*.045s)}
+  .m-ladder{display:block;will-change:transform;transition:transform .55s var(--ease)}
+  .m-txt{display:block;height:1.2em;line-height:1.2;color:rgba(255,255,255,.9)}
+  .m-txt + .m-txt{color:#fff}
+  .m-link:hover .m-txt{color:#fff}
+  .m-arrow{display:none}
+  /* ---- richer main-link hover: slide right + arrow reveal + sibling dim ---- */
+  .m-link{position:relative}
+  .m-mask{transition:transform .55s var(--ease)}
+  .m-txt{color:#fff;transition:color .35s var(--ease)}
+  .m-txt + .m-txt{display:none}
+  .m-nav:hover .m-link .m-txt{color:rgba(255,255,255,.4)}
+  .m-nav .m-link:hover .m-txt{color:#fff}
+  .m-link:hover .m-mask{transform:translateX(42px)}
+  .m-link::before{content:"";position:absolute;left:2px;top:50%;width:22px;height:22px;
+    transform:translate(-16px,-50%) scale(.6);opacity:0;pointer-events:none;
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 17 17 7M9 7h8v8'/%3E%3C/svg%3E") no-repeat center/22px;
+    transition:transform .5s var(--ease),opacity .4s var(--ease)}
+  .m-link:hover::before{transform:translate(0,-50%) scale(1);opacity:1}
+  @media(prefers-reduced-motion:reduce){.m-link:hover .m-mask{transform:none}.m-link::before{display:none}}
+  .m-side{display:flex;flex-direction:column;gap:32px;align-self:center;
+    border-left:1px solid rgba(255,255,255,.12);padding-left:48px}
+  .m-group{display:flex;flex-direction:column;gap:12px}
+  .m-label{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    color:rgba(255,255,255,.34);margin-bottom:2px}
+  .m-slink{display:inline-flex;align-items:center;justify-content:space-between;gap:16px;
+    max-width:340px;text-decoration:none;color:rgba(255,255,255,.7);
+    font-size:17px;font-weight:500;letter-spacing:-.015em;transition:color .3s var(--ease)}
+  .m-slink .tx{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .m-slink .ar{flex:0 0 auto;opacity:0;transform:translateX(-6px);
+    transition:opacity .35s var(--ease),transform .35s var(--ease)}
+  .m-slink .ar svg{width:13px;height:13px;stroke:currentColor;display:block}
+  .m-slink:hover{color:#fff}
+  .m-slink:hover .ar{opacity:1;transform:translateX(0)}
+  .m-foot{flex:0 0 auto;display:flex;align-items:flex-end;justify-content:space-between;gap:24px;
+    border-top:1px solid rgba(255,255,255,.12);padding-top:22px}
+  .m-email{overflow-wrap:anywhere;text-decoration:none;color:#fff;font-weight:500;font-size:clamp(26px,3.6vw,52px);
+    line-height:1;letter-spacing:-.025em;transition:opacity .3s var(--ease)}
+  .m-email:hover{opacity:.65}
+  .m-meta{font-size:14px;color:rgba(255,255,255,.4);text-align:right;line-height:1.45}
+  .m-group,.m-foot>*{opacity:0;transform:translateY(22px);
+    transition:opacity .7s var(--ease),transform .7s var(--ease)}
+  .m-overlay.open .m-group,
+  .m-overlay.open .m-foot>*{opacity:1;transform:translateY(0);
+    transition-delay:calc(.14s + var(--i,0)*.045s)}
+  @media(max-width:900px){
+    .m-main{display:grid;grid-template-columns:1.15fr .85fr;gap:14px 18px;align-content:start;flex:none}
+    .m-nav{grid-column:1;grid-row:1}
+    .m-side{display:contents}
+    .m-side .m-group{gap:8px}
+    .m-side .m-group:first-child{grid-column:2;grid-row:1;align-self:start}
+    .m-side .m-group:last-child{grid-column:1 / -1;grid-row:2;border-top:1px solid rgba(255,255,255,.12);padding-top:16px;margin-top:8px}
+    .m-foot{flex-direction:column;align-items:flex-start;gap:14px}
+    .m-meta{text-align:left;font-size:12px}
+    .m-slink{font-size:15px}
+    .m-email{font-size:22px}
+    .m-label{margin-bottom:0}
+  }
+
+  /* ============ PRELOADER + INTRO ============ */
+  body.preloading{overflow:hidden}
+  .pl{position:fixed;inset:0;z-index:300;background:#070909;color:#fff;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;will-change:transform}
+  .pl.done{transform:translateY(-100%);transition:transform .95s var(--ease-menu)}
+  .pl-mark{overflow:hidden;padding-bottom:.06em}
+  .pl-mark span{display:block;font-weight:500;font-size:clamp(30px,5.2vw,58px);letter-spacing:-.03em;
+    transform:translateY(112%);transition:transform .9s var(--ease-menu) .12s}
+  .pl.in .pl-mark span{transform:translateY(0)}
+  .pl-bar{position:relative;width:min(240px,42vw);height:1px;background:rgba(255,255,255,.16);overflow:hidden}
+  .pl-bar i{position:absolute;inset:0;background:#fff;transform-origin:left center;transform:scaleX(0)}
+  .pl-cap{font-size:13px;letter-spacing:.05em;color:rgba(255,255,255,.42);
+    opacity:0;transform:translateY(8px);
+    transition:opacity .7s var(--ease) .3s,transform .7s var(--ease) .3s}
+  .pl.in .pl-cap{opacity:1;transform:translateY(0)}
+  .pl.leaving .pl-mark span,.pl.leaving .pl-cap{opacity:0;transform:translateY(-14px);
+    transition:opacity .42s var(--ease),transform .55s var(--ease)}
+  .pl.leaving .pl-bar{opacity:0;transition:opacity .42s var(--ease)}
+  @media(prefers-reduced-motion:reduce){.pl{display:none}}
+
+  /* hero headline — masked word reveal */
+  .fhero h1.split{display:block}
+  .fhero h1 .wmask{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.14em;margin-bottom:-.14em}
+  .fhero h1 .wrise{display:inline-block;will-change:transform}
+  html.js-intro .fhero h1 .wrise{transform:translateY(122%);
+    transition:transform .95s var(--ease-menu);transition-delay:calc(.15s + var(--wi,0)*.05s)}
+  html.js-intro .feyebrow,html.js-intro .fhero-lead,html.js-intro .ftabs{opacity:0;transform:translateY(26px);
+    transition:opacity .9s var(--ease),transform .9s var(--ease)}
+  html.js-intro .feyebrow{transition-delay:.30s}
+  html.js-intro .fhero-lead{transition-delay:.42s}
+  html.js-intro .ftabs{transition-delay:.52s}
+  html.js-intro nav.bar{opacity:0;transform:translateY(-16px);
+    transition:opacity .8s var(--ease),transform .8s var(--ease)}
+  body.hero-in .fhero h1 .wrise{transform:translateY(0)}
+  body.hero-in .feyebrow,body.hero-in .fhero-lead,body.hero-in .ftabs{opacity:1;transform:none}
+  body.hero-in nav.bar{opacity:1;transform:none}
+
+  /* ============ RESPONSIVE FIXES ============ */
+  @media(max-width:900px){
+    nav .inner{justify-content:space-between}
+    .m-overlay{overflow-y:auto}
+    .m-main{overflow:visible}
+    .m-foot{padding-top:14px}
+    .m-nav{gap:2px}
+    .m-link{padding:3px 0;font-size:20px;line-height:1.2}
+  }
+  @media(max-width:560px){
+    .lets-social{flex-wrap:wrap;gap:14px 20px}.lets-nav{gap:12px 18px}.lets-bottom{flex-direction:column;align-items:flex-start}
+    .lets-bottom{gap:20px}
+  }
+</style>
+</head>
+<body>
+
+  <!-- PRELOADER -->
+  <div class="pl" id="preloader">
+    <div class="pl-mark"><span>Writing &amp; Media</span></div>
+    <div class="pl-bar"><i></i></div>
+    <div class="pl-cap">Valeriya Ionan — Writing &amp; Media</div>
+  </div>
+
+  <!-- NAV -->
+  <nav class="bar"><div class="wrap"><div class="inner">
+    <span class="logo"><a href="index.html">Valeriya Ionan</a></span>
+    <div class="links"><a href="bio.html">Bio</a><a href="index.html#work">Work</a><a href="index.html#forward">Forward</a><a href="writing.html">Writing &amp; Media</a><a href="contacts.html">Contact</a></div>
+    <a class="mail" href="mailto:hello@ionan.global">hello@ionan.global</a>
+    <span class="menu"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>Menu</span>
+  </div></div></nav>
+
+  <!-- HERO + CATEGORY TABS -->
+  <section class="fhero" id="top"><div class="wrap">
+    <div class="feyebrow"><a href="index.html">Home</a><span class="fdot"></span><span class="fcur">Writing &amp; Media</span></div>
+    <h1>Writing &amp; Media</h1>
+    <p class="fhero-lead">Op-eds, interviews, talks and panels on building digital and agentic states, defense innovation, and the systems that come next.</p>
+    <div class="ftabs" role="tablist" aria-label="Filter writing and media">
+      <button class="ftab active" data-cat="all" role="tab">All</button>
+      <button class="ftab" data-cat="article" role="tab">Op-eds &amp; Articles</button>
+      <button class="ftab" data-cat="talk" role="tab">Talks &amp; Panels</button>
+    </div>
+  </div></section>
+
+  <!-- FEED GRID -->
+  <section><div class="wrap">
+    <div class="fgrid" id="fgrid">
+
+      <!-- OP-EDS & ARTICLES -->
+      <a class="fcard" data-cat="article" href="https://www.weforum.org/stories/2025/07/ukraine-digital-transformation-government-services/" target="_blank" rel="noopener">
+        <div class="fcover"><img src="img/feed/o-wef-startup.jpg" alt="World Economic Forum op-ed cover" loading="lazy" /></div>
+        <div class="fmeta"><span class="fcat">World Economic Forum</span><span class="ftitle">Should governments act like start-ups?</span></div>
+      </a>
+      <a class="fcard" data-cat="article" href="https://www.govtechintelhub.org/case-study-details/ukraine's-digital-transformation-as-europe's-digital-opportunity/aJYTG0000000ZXF4A2" target="_blank" rel="noopener">
+        <div class="fcover"><img src="img/feed/o-govtech.jpg" alt="GovTech Intelligence Hub article cover" loading="lazy" /></div>
+        <div class="fmeta"><span class="fcat">GovTech Intelligence Hub</span><span class="ftitle">Ukraine's Digital Transformation as Europe's Digital Opportunity</span></div>
+      </a>
+      <a class="fcard" data-cat="article" href="https://www.atlanticcouncil.org/dispatches/what-ukraines-wartime-tech-ecosystem-can-teach-the-rest-of-the-world/" target="_blank" rel="noopener">
+        <div class="fcover"><img src="img/feed/g-ecosystem.jpg" alt="An interconnected technology ecosystem" loading="lazy" /></div>
+        <div class="fmeta"><span class="fcat">Atlantic Council</span><span class="ftitle">What Ukraine's wartime tech ecosystem can teach the rest of the world</span></div>
+      </a>
+      <a class="fcard" data-cat="article" href="https://gofore.com/en/news/ukraines-lessons-for-europe-how-to-build-digital-resilience/" target="_blank" rel="noopener">
+        <div class="fcover"><img src="img/feed/g-resilience-shield.jpg" alt="A protective dome of light over a plaza" loading="lazy" /></div>
+        <div class="fmeta"><span class="fcat">Gofore</span><span class="ftitle">Ukraine's lessons for Europe: How to build digital resilience</span></div>
+      </a>
+      <a class="fcard" data-cat="article" href="https://www.atlanticcouncil.org/blogs/ukrainealert/ukraines-experience-can-teach-europe-how-to-defend-against-russia/" target="_blank" rel="noopener">
+        <div class="fcover"><img src="img/feed/g-defense-wall.jpg" alt="A glowing defensive wall shielding a city" loading="lazy" /></div>
+        <div class="fmeta"><span class="fcat">Atlantic Council</span><span class="ftitle">Ukraine's experience can teach Europe how to defend against Russia</span></div>
+      </a>
+      <a class="fcard" data-cat="article" href="https://apolitical.co/en/articles/uas-digital-journey-from-wartime-resilience-to-agentic-future-179?share=copy&amp;uuid=article" target="_blank" rel="noopener">
+        <div class="fcover"><img src="img/feed/o-apolitical.jpg" alt="Apolitical article cover" loading="lazy" /></div>
+        <div class="fmeta"><span class="fcat">Apolitical</span><span class="ftitle">UA's digital journey: from wartime resilience to agentic future</span></div>
+      </a>
+      <a class="fcard" data-cat="article" href="https://www.sir.advancedleadership.harvard.edu/articles/digital-transformation-in-ukraine-before-during-after-war" target="_blank" rel="noopener">
+        <div class="fcover"><img src="img/feed/o-harvard.jpg" alt="Harvard ALI Social Impact Review article cover" loading="lazy" /></div>
+        <div class="fmeta"><span class="fcat">Harvard ALI Social Impact Review</span><span class="ftitle">Digital Transformation in Ukraine: Before, During, and After the War</span></div>
+      </a>
+      <a class="fcard" data-cat="article" href="https://live.handelsblatt.com/interview-valeriya-ionan/" target="_blank" rel="noopener">
+        <div class="fcover"><img src="img/feed/o-handelsblatt.jpg" alt="Handelsblatt interview cover" loading="lazy" /></div>
+        <div class="fmeta"><span class="fcat">Handelsblatt</span><span class="ftitle">Interview mit Valeriya Ionan</span></div>
+      </a>
+      <a class="fcard" data-cat="article" href="https://govstack.global/news/interview-with-valeriya-ionan/" target="_blank" rel="noopener">
+        <div class="fcover"><img src="img/feed/o-govstack.jpg" alt="GovStack interview cover" loading="lazy" /></div>
+        <div class="fmeta"><span class="fcat">GovStack</span><span class="ftitle">Interview with the Deputy Minister for European Integration of Ukraine: Valeriya Ionan</span></div>
+      </a>
+      <a class="fcard" data-cat="article" href="https://govinsider.asia/intl-en/article/what-ukraines-battlefield-testbed-teaches-us-about-global-defence-collaboration" target="_blank" rel="noopener">
+        <div class="fcover"><img src="img/feed/o-govinsider.jpg" alt="GovInsider article cover" loading="lazy" /></div>
+        <div class="fmeta"><span class="fcat">GovInsider</span><span class="ftitle">What Ukraine's battlefield testbed teaches us about global defence collaboration</span></div>
+      </a>
+      <a class="fcard" data-cat="article" href="https://www.berlinglobaldialogue.org/resources/how-ukraine-is-developing-digital-leadership-in-a-multipolar-world" target="_blank" rel="noopener">
+        <div class="fcover"><img src="img/feed/o-berlin.jpg" alt="Berlin Global Dialogue article cover" loading="lazy" /></div>
+        <div class="fmeta"><span class="fcat">Berlin Global Dialogue</span><span class="ftitle">How Ukraine's Digital State is Driving Resilience and Reinvention</span></div>
+      </a>
+      <a class="fcard" data-cat="article" href="https://www.latribune.fr/technos-medias/informatique/l-ia-comble-le-manque-d-enseignants-en-ukraine-entretien-avec-la-ministre-ukrainienne-de-la-transformation-numerique-1031088.html" target="_blank" rel="noopener">
+        <div class="fcover"><img src="img/feed/o-latribune.jpg" alt="La Tribune interview cover" loading="lazy" /></div>
+        <div class="fmeta"><span class="fcat">La Tribune</span><span class="ftitle">From digital identity to reporting enemy troops</span></div>
+      </a>
+      <a class="fcard" data-cat="article" href="https://www.cnbc.com/2026/02/18/ukraine-zelenskyy-russia-war-technology-ai.html" target="_blank" rel="noopener">
+        <div class="fcover"><img src="img/feed/g-superapp.jpg" alt="A phone projecting a super-app over a tiny city" loading="lazy" /></div>
+        <div class="fmeta"><span class="fcat">CNBC</span><span class="ftitle">In wartime Ukraine, the government is deploying a super app for the citizenry's future</span></div>
+      </a>
+      <a class="fcard" data-cat="article" href="https://background.tagesspiegel.de/smart-city-und-stadtentwicklung/briefing/ukraines-vize-digitalministerin-wir-kaempfen-an-der-digitalen-front" target="_blank" rel="noopener">
+        <div class="fcover"><img src="img/feed/o-tagesspiegel.jpg" alt="Tagesspiegel interview cover" loading="lazy" /></div>
+        <div class="fmeta"><span class="fcat">Tagesspiegel</span><span class="ftitle">Ukraines Vize-Digitalministerin: „Wir kämpfen an der digitalen Front"</span></div>
+      </a>
+      <a class="fcard" data-cat="article" href="https://wiadomosci.onet.pl/swiat/blisko-polowa-firm-przestala-dzialac-straty-85-mld-dol-w-ciagu-stu-dni/kf8v78y?utm_source=l.instagram.com_viasg_wiadomosci&amp;utm_medium=referal&amp;utm_campaign=leo_automatic&amp;srcc=undefined&amp;utm_v=2" target="_blank" rel="noopener">
+        <div class="fcover"><img src="img/feed/o-onet.jpg" alt="Onet article cover" loading="lazy" /></div>
+        <div class="fmeta"><span class="fcat">Onet · Wiadomości</span><span class="ftitle">Nearly half of Ukrainian companies stopped operating; losses ran into billions after 100 days</span></div>
+      </a>
+      <a class="fcard" data-cat="article" href="https://chandlergovernance.com/governancematters/delivering-digital-transformation-in-ukraine" target="_blank" rel="noopener">
+        <div class="fcover"><img src="img/feed/g-ukraine-monument.jpg" alt="A white civic monument with a subtle trident form" loading="lazy" /></div>
+        <div class="fmeta"><span class="fcat">Governance Matters Magazine</span><span class="ftitle">Delivering Digital Transformation in Ukraine</span></div>
+      </a>
+      <a class="fcard" data-cat="article" href="https://public.digital/pd-insights/blog/2023/08/show-the-thing-4-diia-education-ukraines-ministry-of-digital-transformation" target="_blank" rel="noopener">
+        <div class="fcover"><img src="img/feed/g-education.jpg" alt="A bright learning space with holographic panels" loading="lazy" /></div>
+        <div class="fmeta"><span class="fcat">Public Digital</span><span class="ftitle">Show the Thing 4: Diia.Education</span></div>
+      </a>
+      <a class="fcard" data-cat="article" href="https://www.di.se/digital/sa-bygger-rekordunga-ministrar-superapp-och-robotarme/" target="_blank" rel="noopener">
+        <div class="fcover"><img src="img/feed/o-dise.jpg" alt="DI.se article cover" loading="lazy" /></div>
+        <div class="fmeta"><span class="fcat">DI.se</span><span class="ftitle">How record-young ministers build a super app and a robot army</span></div>
+      </a>
+
+      <!-- TALKS & PANELS -->
+      <a class="fcard" data-cat="talk" href="https://ega.ee/podcast-blog-ukraines-digital-story-turning-challenges-into-change/" target="_blank" rel="noopener">
+        <div class="fcover"><img src="img/feed/o-ega.jpg" alt="EGA Digital Government Podcast cover" loading="lazy" /></div>
+        <div class="fmeta"><span class="fcat">EGA · Podcast</span><span class="ftitle">Podcast 🎧 &amp; blog: Ukraine's digital story: Turning challenges into change</span></div>
+      </a>
+      <a class="fcard" data-cat="talk" href="https://podcasts.apple.com/us/podcast/valeriya-ionan-on-ukraines-digital-state-vision-diia/id296392049?i=1000724950955" target="_blank" rel="noopener">
+        <div class="fcover"><img src="img/feed/g-podcast-mic.jpg" alt="A studio podcast microphone haloed by light" loading="lazy" /></div>
+        <div class="fmeta"><span class="fcat">Technovation with Peter High</span><span class="ftitle">Valeriya Ionan on Ukraine's Digital State Vision, Diia, and Innovation During War</span></div>
+      </a>
+      <a class="fcard" data-cat="talk" href="https://initiatives.weforum.org/strategic-intelligence-community/event-details/making-agentic-ai-work-for-government:-a-readiness-framework/a0WTG000001jEsf2AE" target="_blank" rel="noopener">
+        <div class="fcover"><img src="img/feed/g-agentic-gov.jpg" alt="An AI agent cooperating with a government hologram" loading="lazy" /></div>
+        <div class="fmeta"><span class="fcat">World Economic Forum · 2026</span><span class="ftitle">Making Agentic AI Work for Government: A Readiness Framework</span></div>
+      </a>
+      <a class="fcard" data-cat="talk" href="https://youtu.be/PUl79PUF7yU?si=46Auq7tYnEHbHm3Q" target="_blank" rel="noopener">
+        <div class="fcover"><img src="img/feed/g-tallinn.jpg" alt="A bridge of light between two pavilions" loading="lazy" /></div>
+        <div class="fmeta"><span class="fcat">Tallinn Digital Summit · 2025</span><span class="ftitle">Strengthening the Estonia–Ukraine Digital Partnership New Action Plan Unveiled</span></div>
+      </a>
+      <a class="fcard" data-cat="talk" href="https://youtu.be/y0jJowlfoUU?si=kRy2P8Dg0K8_lgt6" target="_blank" rel="noopener">
+        <div class="fcover"><img src="img/feed/g-showcase.jpg" alt="A futuristic exhibition pavilion of digital services" loading="lazy" /></div>
+        <div class="fmeta"><span class="fcat">Ukraine House Davos · World Economic Forum week 2024</span><span class="ftitle">Showcasing Ukraine's Digital Transformation Vision - Diia, Mriia &amp; Win-Win</span></div>
+      </a>
+      <a class="fcard" data-cat="talk" href="https://www.youtube.com/live/ELROFk8yXLo?si=WMerGT5OAG7Fa2eV" target="_blank" rel="noopener">
+        <div class="fcover"><img src="img/feed/g-globsec.jpg" alt="A forum stage opening onto a technological frontier" loading="lazy" /></div>
+        <div class="fmeta"><span class="fcat">GLOBSEC · 2024</span><span class="ftitle">Tech Frontiers: Solving for the Next Challenge</span></div>
+      </a>
+      <a class="fcard" data-cat="talk" href="https://youtu.be/aylpnr1gQRQ?si=M4qyP1hnF5meahSn" target="_blank" rel="noopener">
+        <div class="fcover"><img src="img/feed/g-masters.jpg" alt="A beacon of light over a map of Europe at dawn" loading="lazy" /></div>
+        <div class="fmeta"><span class="fcat">Masters of Digital · 2026</span><span class="ftitle">Ukraine's digital frontline: Europe's wake-up call</span></div>
+      </a>
+      <a class="fcard" data-cat="talk" href="https://forbes.ge/en/chven-movigebth-am-oms-interviu-valeria-ionanthan/" target="_blank" rel="noopener">
+        <div class="fcover"><img src="img/feed/g-victory.jpg" alt="Dawn light over a resilient city skyline" loading="lazy" /></div>
+        <div class="fmeta"><span class="fcat">Forbes</span><span class="ftitle">We Will Win This War | Interview With Valeriya Ionan</span></div>
+      </a>
+      <a class="fcard" data-cat="talk" href="https://www.youtube.com/watch?v=BLx9YthgROQ" target="_blank" rel="noopener">
+        <div class="fcover"><img src="img/feed/undp.jpg" alt="Valeriya Ionan in a UNDP interview" loading="lazy" /></div>
+        <div class="fmeta"><span class="fcat">UNDP</span><span class="ftitle">“We're building the most convenient digital state in the world”</span></div>
+      </a>
+
+    </div>
+  </div></section>
+
+  <!-- LET'S TALK (footer) -->
+  <footer class="lets" id="contact-footer"><div class="wrap">
+    <div class="lets-card">
+      <div class="lets-top">
+        <h2>Let&rsquo;s work together</h2>
+        <a class="email" href="mailto:hello@ionan.global">hello@ionan.global</a>
+      </div>
+      <div class="lets-bottom">
+        <nav class="lets-nav"><a href="bio.html">Bio</a><a href="index.html#work">Work</a><a href="index.html#forward">Forward</a><a href="writing.html">Writing &amp; Media</a></nav>
+        <div class="lets-social">
+          <a href="https://youtube.com/@forwardwithvaleriya" target="_blank" rel="noopener">YouTube</a>
+          <a href="https://substack.com/@valeriyaionan" target="_blank" rel="noopener">Substack</a>
+          <a href="https://www.instagram.com/valeriya_ionan/" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://www.linkedin.com/in/valeriyaionan/" target="_blank" rel="noopener">Linkedin</a>
+        </div>
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- FULLSCREEN MENU -->
+  <div class="m-overlay" id="menu-overlay" aria-hidden="true" role="dialog" aria-label="Menu">
+    <div class="m-head">
+      <span class="m-logo">Valeriya Ionan</span>
+      <button class="m-close" type="button" aria-label="Close menu"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"><path d="M5 5l14 14M19 5 5 19"/></svg>Close</button>
+    </div>
+    <div class="m-main">
+            <nav class="m-nav">
+        <a class="m-link" href="bio.html" style="--i:0"><span class="m-mask"><span class="m-rise"><span class="m-ladder"><span class="m-txt">Bio</span><span class="m-txt">Bio</span></span></span></span></a>
+        <a class="m-link" href="cases.html" style="--i:1"><span class="m-mask"><span class="m-rise"><span class="m-ladder"><span class="m-txt">Cases</span><span class="m-txt">Cases</span></span></span></span></a>
+        <a class="m-link" href="index.html#work" style="--i:2"><span class="m-mask"><span class="m-rise"><span class="m-ladder"><span class="m-txt">Who I Work With</span><span class="m-txt">Who I Work With</span></span></span></span></a>
+        <a class="m-link" href="index.html#services" style="--i:3"><span class="m-mask"><span class="m-rise"><span class="m-ladder"><span class="m-txt">Work With Me</span><span class="m-txt">Work With Me</span></span></span></span></a>
+        <a class="m-link" href="index.html#forward" style="--i:4"><span class="m-mask"><span class="m-rise"><span class="m-ladder"><span class="m-txt">Forward</span><span class="m-txt">Forward</span></span></span></span></a>
+        <a class="m-link" href="index.html#book" style="--i:5"><span class="m-mask"><span class="m-rise"><span class="m-ladder"><span class="m-txt">Gov Freestyler</span><span class="m-txt">Gov Freestyler</span></span></span></span></a>
+        <a class="m-link" href="writing.html" style="--i:6"><span class="m-mask"><span class="m-rise"><span class="m-ladder"><span class="m-txt">Writing &amp; Media</span><span class="m-txt">Writing &amp; Media</span></span></span></span></a>
+        <a class="m-link" href="index.html#building" style="--i:7"><span class="m-mask"><span class="m-rise"><span class="m-ladder"><span class="m-txt">What I'm Building</span><span class="m-txt">What I'm Building</span></span></span></span></a>
+        <a class="m-link" href="contacts.html" style="--i:9"><span class="m-mask"><span class="m-rise"><span class="m-ladder"><span class="m-txt">Contacts</span><span class="m-txt">Contacts</span></span></span></span></a>
+      </nav>
+      <div class="m-side">
+        <div class="m-group" style="--i:10">
+          <span class="m-label">Follow</span>
+          <a class="m-slink" href="https://www.linkedin.com/in/valeriyaionan/" target="_blank" rel="noopener"><span class="tx">LinkedIn</span><span class="ar"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
+          <a class="m-slink" href="https://www.instagram.com/valeriya_ionan/" target="_blank" rel="noopener"><span class="tx">Instagram</span><span class="ar"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
+          <a class="m-slink" href="https://youtube.com/@forwardwithvaleriya" target="_blank" rel="noopener"><span class="tx">YouTube</span><span class="ar"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
+          <a class="m-slink" href="https://substack.com/@valeriyaionan" target="_blank" rel="noopener"><span class="tx">Substack</span><span class="ar"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
+        </div>
+        <div class="m-group" style="--i:11">
+          <span class="m-label">From Substack</span>
+          <a class="m-slink" href="https://valeriyaionan.substack.com/p/no-safe-place-future" target="_blank" rel="noopener"><span class="tx">No Safe Place Future</span><span class="ar"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
+          <a class="m-slink" href="https://valeriyaionan.substack.com/p/my-day-in-2140-when-i-turned-150" target="_blank" rel="noopener"><span class="tx">My Day in 2140: When I Turned 150</span><span class="ar"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
+          <a class="m-slink" href="https://valeriyaionan.substack.com/p/the-new-era-of-everything" target="_blank" rel="noopener"><span class="tx">The New Era of Everything</span><span class="ar"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
+          <a class="m-slink" href="https://substack.com/@valeriyaionan" target="_blank" rel="noopener"><span class="tx">Read all on Substack</span><span class="ar"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></span></a>
+        </div>
+      </div>
+    </div>
+    <div class="m-foot">
+      <a class="m-email" href="mailto:hello@ionan.global" style="--i:13">hello@ionan.global</a>
+      <div class="m-meta" style="--i:14">Government &amp; business innovator<br>Available for select partnerships · 2026</div>
+    </div>
+  </div>
+
+<script>
+  /* ---- Lenis smooth scroll ---- */
+  if(window.Lenis && !matchMedia("(prefers-reduced-motion: reduce)").matches){
+    const lenis=new Lenis({lerp:0.1,smoothWheel:true});window.__lenis=lenis;
+    function raf(t){lenis.raf(t);requestAnimationFrame(raf);}
+    requestAnimationFrame(raf);
+  }
+
+  /* ---- Scroll-reveal ---- */
+  (function(){
+    const els=[...document.querySelectorAll(".reveal")];
+    const ro=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){
+      e.target.classList.add("in");ro.unobserve(e.target);}});},
+      {threshold:0,rootMargin:"0px 0px -6% 0px"});
+    els.forEach(el=>ro.observe(el));
+  })();
+
+  /* ---- thumbnail fallback: failed or YouTube grey placeholder -> render image ---- */
+  (function(){
+    document.querySelectorAll(".fcover img[data-fallimg]").forEach(img=>{
+      let swapped=false; const fb=img.getAttribute("data-fallimg");
+      function fix(){ if(swapped) return; if(img.naturalWidth && img.naturalWidth>120) return; swapped=true; img.src=fb; }
+      if(img.complete) fix();
+      else { img.addEventListener("load",fix); img.addEventListener("error",()=>{ if(!swapped){swapped=true; img.src=fb;} }); }
+    });
+  })();
+
+  /* ---- feed category filter ---- */
+  (function(){
+    const tabs=[...document.querySelectorAll(".ftab")];
+    const cards=[...document.querySelectorAll(".fcard")];
+    if(!tabs.length)return;
+    tabs.forEach(t=>t.addEventListener("click",()=>{
+      const cat=t.dataset.cat;
+      tabs.forEach(x=>{const on=x===t;x.classList.toggle("active",on);x.setAttribute("aria-selected",on?"true":"false");});
+      cards.forEach(c=>{c.hidden=(cat!=="all" && c.dataset.cat!==cat);});
+    }));
+  })();
+
+  /* ---- preloader + hero intro (compositor CSS) ---- */
+  (function(){
+    const pl=document.getElementById("preloader");
+    const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+    document.body.classList.add("preloading");
+    if(!reduce){
+      const h1=document.querySelector(".fhero h1");
+      if(h1 && !h1.classList.contains("split")){
+        const ws=h1.textContent.trim().split(/\s+/);
+        h1.textContent="";h1.classList.add("split");
+        ws.forEach((w,i)=>{
+          const m=document.createElement("span");m.className="wmask";
+          const r=document.createElement("span");r.className="wrise";
+          r.style.setProperty("--wi",i);r.textContent=w;
+          m.appendChild(r);h1.appendChild(m);
+          if(i<ws.length-1)h1.appendChild(document.createTextNode(" "));
+        });
+      }
+      document.documentElement.classList.add("js-intro");
+    }
+    function reveal(){
+      document.body.classList.remove("preloading");
+      document.body.classList.add("hero-in");
+      if(window.__lenis)window.__lenis.start();
+    }
+    if(!pl||reduce){ if(pl)pl.remove(); reveal(); return; }
+    if(window.__lenis)window.__lenis.stop();
+    requestAnimationFrame(()=>requestAnimationFrame(()=>pl.classList.add("in")));
+    const fill=pl.querySelector(".pl-bar i");
+    const startT=performance.now();
+    let prog=0,target=0,ended=false;
+    (function paint(){
+      prog+=(target-prog)*0.09;
+      if(fill)fill.style.transform="scaleX("+Math.min(prog,1).toFixed(4)+")";
+      if(!ended)requestAnimationFrame(paint);
+    })();
+    const ramp=setInterval(()=>{target=Math.min(target+0.05,0.92);},90);
+    function exit(){
+      if(ended)return;ended=true;
+      clearInterval(ramp);
+      if(fill)fill.style.transform="scaleX(1)";
+      pl.classList.add("leaving");
+      setTimeout(()=>{pl.classList.add("done");reveal();},300);
+      setTimeout(()=>{pl.remove();},300+1000);
+    }
+    function ready(){const wait=Math.max(0,1700-(performance.now()-startT));setTimeout(exit,wait);}
+    if(document.readyState==="complete")ready();
+    else window.addEventListener("load",ready,{once:true});
+    setTimeout(()=>{if(!ended)exit();},4500);
+  })();
+
+  /* ---- custom cursor ---- */
+  (function(){
+    if(!matchMedia("(hover:hover) and (pointer:fine)").matches)return;
+    document.documentElement.classList.add("has-cursor");
+    const cur=document.createElement("div");cur.className="cursor hidden";document.body.appendChild(cur);
+    document.querySelectorAll(".lets-card,.fcover.t-article,.fcover.t-interview,.fcover.t-talk").forEach(e=>e.dataset.lum="0.08");
+    function rgbLum(s){const m=s.match(/[\d.]+/g);if(!m||m.length<3)return null;if(m.length>=4&&parseFloat(m[3])<0.35)return null;return (0.2126*+m[0]+0.7152*+m[1]+0.0722*+m[2])/255;}
+    function lumAt(x,y){let node=document.elementFromPoint(x,y);while(node&&node.dataset){if(node.dataset.lum!=null)return parseFloat(node.dataset.lum);const bl=rgbLum(getComputedStyle(node).backgroundColor);if(bl!=null)return bl;node=node.parentElement;}return 1;}
+    function ctxLum(el){let node=el;while(node&&node.dataset){if(node.dataset.lum!=null)return parseFloat(node.dataset.lum);const bl=rgbLum(getComputedStyle(node).backgroundColor);if(bl!=null)return bl;node=node.parentElement;}return 1;}
+    function setInv(x,y){cur.classList.toggle("inv",lumAt(x,y)<0.55);}
+    let mx=innerWidth/2,my=innerHeight/2,cx=mx,cy=my,seen=false,morphEl=null;
+    addEventListener("mousemove",e=>{mx=e.clientX;my=e.clientY;if(!seen){seen=true;cx=mx;cy=my;cur.classList.remove("hidden");}if(!morphEl)setInv(mx,my);},{passive:true});
+    addEventListener("mouseleave",()=>cur.classList.add("hidden"));
+    (function tick(){
+      let tx=mx,ty=my;
+      if(morphEl){const r=morphEl.getBoundingClientRect();tx=r.left+r.width/2;ty=r.top+r.height/2;cur.style.width=(r.width+14)+"px";cur.style.height=(r.height+14)+"px";}
+      cx+=(tx-cx)*0.22;cy+=(ty-cy)*0.22;
+      cur.style.transform="translate("+cx+"px,"+cy+"px) translate(-50%,-50%)";
+      requestAnimationFrame(tick);
+    })();
+    const hot="nav .mail,.glass-mail,.wclose-bio,.ftab,.lets-nav a,.lets-social a,.lets-card .email,.m-close,.m-slink";
+    document.querySelectorAll(hot).forEach(el=>{
+      el.addEventListener("mouseenter",()=>{morphEl=el;cur.classList.add("morph");
+        const br=parseFloat(getComputedStyle(el).borderRadius)||8;
+        cur.style.borderRadius=Math.min(br+7,40)+"px";cur.classList.toggle("inv",ctxLum(el)<0.55);});
+      el.addEventListener("mouseleave",()=>{morphEl=null;cur.classList.remove("morph");cur.style.width="";cur.style.height="";cur.style.borderRadius="";});
+    });
+  })();
+
+  /* ---- nav magnetic sliding highlight ---- */
+  (function(){
+    const links=document.querySelector("nav .links");if(!links)return;
+    const hl=document.createElement("span");hl.className="nav-hl";links.appendChild(hl);
+    links.querySelectorAll("a").forEach(a=>{
+      a.addEventListener("mouseenter",()=>{hl.style.opacity="1";hl.style.width=a.offsetWidth+"px";hl.style.height=a.offsetHeight+"px";hl.style.transform="translate("+a.offsetLeft+"px,"+a.offsetTop+"px)";});
+    });
+    links.addEventListener("mouseleave",()=>{hl.style.opacity="0";});
+  })();
+
+  /* ---- magnetic buttons ---- */
+  (function(){
+    if(!matchMedia("(hover:hover) and (pointer:fine)").matches)return;
+    document.querySelectorAll(".menu,.glass-mail,.wclose-bio").forEach(btn=>{
+      btn.style.willChange="transform";
+      btn.addEventListener("mousemove",e=>{const r=btn.getBoundingClientRect();const x=(e.clientX-r.left-r.width/2)*0.25;const y=(e.clientY-r.top-r.height/2)*0.25;btn.style.transform="translate("+x+"px,"+y+"px)";});
+      btn.addEventListener("mouseleave",()=>{btn.style.transform="";});
+    });
+  })();
+
+  /* ---- fullscreen menu ---- */
+  (function(){
+    const ov=document.getElementById("menu-overlay");
+    const openBtn=document.querySelector("nav .menu");
+    if(!ov||!openBtn)return;
+    const closeBtn=ov.querySelector(".m-close");
+    let open=false;
+    function setOpen(v){
+      open=v;
+      ov.classList.toggle("open",v);
+      ov.setAttribute("aria-hidden",v?"false":"true");
+      document.body.classList.toggle("menu-open",v);
+      if(window.__lenis){v?window.__lenis.stop():window.__lenis.start();}
+    }
+    openBtn.addEventListener("click",()=>setOpen(true));
+    if(closeBtn)closeBtn.addEventListener("click",()=>setOpen(false));
+    document.addEventListener("keydown",e=>{if(e.key==="Escape"&&open)setOpen(false);});
+    ov.querySelectorAll("a").forEach(a=>{a.addEventListener("click",()=>setOpen(false));});
+  })();
+</script>
+</body>
+</html>
